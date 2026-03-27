@@ -1,0 +1,17 @@
+{
+  "modelName": "accelerometer_lsm6dsm",
+  "type": "accelerometer",
+  "unit": "g",
+  "conversion": {
+    "type": "axis_linear",
+    "sensitivity": {
+      "x": 0.061,
+      "y": 0.061,
+      "z": 0.061
+    }
+  },
+  "properties": {
+    "fullScaleRange": 2,
+    "outputDataRate": 104.0
+  }
+}

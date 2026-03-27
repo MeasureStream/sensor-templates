@@ -1,0 +1,29 @@
+{
+  "modelName": "pressure_ms5837",
+  "type": "pressure",
+  "unit": "mbar",
+  "ranges": {
+    "phys": {
+      "min": 0.0,
+      "max": 30000.0
+    },
+    "sampling": {
+      "min": 0.000001,
+      "max": 50.0
+    },
+    "threshold": {
+      "min": 0.0,
+      "max": 30000.0
+    }
+  },
+  "conversion": {
+    "type": "linear",
+    "a": 1.0,
+    "b": 0.0
+  },
+  "properties": {
+    "readingConsumption": 0.000025,
+    "standbyConsumption": 0.1,
+    "fluidDensity": 1025.0
+  }
+}

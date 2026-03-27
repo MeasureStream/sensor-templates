@@ -1,0 +1,22 @@
+{
+  "modelName": "humidity_hpp845e",
+  "type": "humidity",
+  "unit": "percent",
+  "ranges": {
+    "phys": {
+      "min": 0.0,
+      "max": 100.0
+    }
+  },
+  "conversion": {
+    "type": "polynomial",
+    "coefficients": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  "properties": {
+    "responseTime": 5.0
+  }
+}
