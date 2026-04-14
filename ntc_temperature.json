@@ -1,6 +1,8 @@
 {
+  "schemaVersion": "1.0.0",
+  
   "modelName": "TemperatureSensorNTC",
-
+  
   "mpn": "NTCLP450E3",
   "manufacturer": "Vishay",
   "datasheet": "https://www.vishay.com/docs/29110/ntclp450e3.pdf",
