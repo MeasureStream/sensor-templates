@@ -1,44 +1,112 @@
 {
-  "modelName": "ntc_temperature",
+  "schemaVersion": "1.0.0",
+  
+  "modelName": "TemperatureSensorNTC",
+  
+  "mpn": "NTCLP450E3",
+  "manufacturer": "Vishay",
+  "datasheet": "https://www.vishay.com/docs/29110/ntclp450e3.pdf",
+  "templateId": 201,
+
   "type": "temperature",
-  "unit": "celsius",
+
+  "unit": "\\degreeCelsius",
+
   "ranges": {
+
     "phys": {
       "min": -40.0,
-      "max": 105.0
+      "max": 105.0,
+      "siExp": 0,
+      "si": [0, 0, 0, 0, 1, 0, 0, 0],
+      "dsi": "\\degreeCelsius"
     },
+
+    "physROC": {
+      "min": 0.0,
+      "max": 105.0,
+      "siExp": 0,
+      "si": [0, 0, -1, 0, 1, 0, 0, 0],
+      "dsi": "\\degreeCelsius\\per\\second"
+    },
+
     "elec": {
       "min": 0.0,
-      "max": 0.0
+      "max": 65535.0,
+      "siExp": 0,
+      "si": [0, 0, 0, 0, 0, 0, 0, 0],
+      "dsi": "\\one"
     },
+
     "sampling": {
-      "min": 0.000001,
-      "max": 1000.0
+      "min": 0.001,
+      "max": 0.0,
+      "siExp": 0,
+      "si": [0, 0, 1, 0, 0, 0, 0, 0],
+      "dsi": "\\second"
     },
+
     "threshold": {
       "min": -40.0,
       "max": 105.0
     }
+
   },
-  "conversion": {
-    "type": "polynomial",
+  "properties": {
+
+    "responseTime": 0.16,
+    "responseTimeSiExp": 0,
+    "responseTimeSi": [0, 0, 1, 0, -1, 0, 0, 0],
+    "responseTimeDsi": "\\second\\per\\degreeCelsius",
+
+    "selfHeat": 0.0,
+    "selfHeatSiExp": 0,
+    "selfHeatSi": [0, 0, -1, 0, 1, 0, 0, 0],
+    "selfHeatDsi": "\\kelvin\\per\\second",
+
+    "readingConsumption": 0.5,
+    "readingConsumptionSiExp": -9,
+    "readingConsumptionSi": [0, 0, 1, 1, 0, 0, 0, 0],
+    "readingConsumptionDsi": "\\coulomb"
+  },
+  "calibration": {
+
+    "type": "qubic-interpolation",
     "coefficients": [
       0.0,
       0.0,
       0.0,
       0.0
-    ]
-  },
-  "properties": {
-    "refResOhm": 100000.0,
-    "refTempC": 25.0,
-    "responseTime": 0.16,
-    "selfHeat": 0.0
+    ],
+    "calibrationCoefficients": {
+      "coeffA": { "siExp": 0, "si": [0, 0, 0, 0, 1, 0, 0, 0], "dsi": "\\degreeCelsius" },
+      "coeffB": { "siExp": 0, "si": [0, 0, 0, 0, 1, 0, 0, 0], "dsi": "\\degreeCelsius" },
+      "coeffC": { "siExp": 0, "si": [0, 0, 0, 0, 1, 0, 0, 0], "dsi": "\\degreeCelsius" },
+      "coeffD": { "siExp": 0, "si": [0, 0, 0, 0, 1, 0, 0, 0], "dsi": "\\degreeCelsius" }
+    }
   },
   "metrology": {
-    "uncertaintyPdf": "uniform",
-    "absUncertainty": 5.0,
-    "uB": 2.9,
-    "k": 2.0
+
+    "readingUncertaintyPdf": "uniform",
+    "readingUncertainty": [
+      { "referenceValue": 25.0,
+        "absUncertainty": 5.0,
+        "uB": 2.9,
+        "k": 2.0
+      }
+    ],
+
+    "UncertaintyPdf": "gaussian",
+    "Uncertainty": [
+      { "referenceValue": 0,
+        "absUncertainty": 0,
+        "uc": 0,
+        "k": 2.0
+      }
+    ],
+
+    "calDate": 0,
+    "calPeriod": 365,
+    "certificateId": ""
   }
 }
