@@ -79,21 +79,23 @@
       0.0
     ],
     "calibrationCoefficients": {
-      "coeffA": { "siExp": 0, "si": [0, 0, 0, 0, 1, 0, 0, 0], "dsi": "\\degreeCelsius" },
-      "coeffB": { "siExp": 0, "si": [0, 0, 0, 0, 1, 0, 0, 0], "dsi": "\\degreeCelsius" },
-      "coeffC": { "siExp": 0, "si": [0, 0, 0, 0, 1, 0, 0, 0], "dsi": "\\degreeCelsius" },
-      "coeffD": { "siExp": 0, "si": [0, 0, 0, 0, 1, 0, 0, 0], "dsi": "\\degreeCelsius" }
+      "A": { "siExp": 0, "si": [0, 0, 0, 0, 1, 0, 0, 0], "dsi": "\\degreeCelsius" },
+      "B": { "siExp": 0, "si": [0, 0, 0, 0, 1, 0, 0, 0], "dsi": "\\degreeCelsius" },
+      "C": { "siExp": 0, "si": [0, 0, 0, 0, 1, 0, 0, 0], "dsi": "\\degreeCelsius" },
+      "D": { "siExp": 0, "si": [0, 0, 0, 0, 1, 0, 0, 0], "dsi": "\\degreeCelsius" }
     }
   },
   "metrology": {
 
-    "readingUncertaintyPdf": "uniform",
+
+    "evaluationFormula": "uB",
+
+    "requiredInputs": [],
+
     "readingUncertainty": [
-      { "referenceValue": 25.0,
-        "absUncertainty": 5.0,
-        "uB": 2.9,
-        "k": 2.0
-      }
+        { "varName": "absUncertainty", "value": 5.0, "PDF": "uniform", "description": "" },
+        { "varName": "uB", "value": 2.9, "description": "" },
+        {"varName": "coverageFactor", "value": 2.0, "description": ""}
     ],
 
     "UncertaintyPdf": "gaussian",
