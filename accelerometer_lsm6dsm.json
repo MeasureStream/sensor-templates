@@ -1,17 +1,97 @@
 {
-  "modelName": "accelerometer_lsm6dsm",
-  "type": "accelerometer",
-  "unit": "g",
-  "conversion": {
-    "type": "axis_linear",
-    "sensitivity": {
-      "x": 0.061,
-      "y": 0.061,
-      "z": 0.061
+  "schemaVersion": "1.0.0",
+  
+  "modelName": "AccelerometerLSM6DSM",
+  
+  "mpn": "LSM6DSMTR",
+  "manufacturer": "STMicroelectronics",
+  "datasheet": "https://www.st.com/resource/en/datasheet/lsm6dsm.pdf",
+  "templateId": 204,
+
+  "type": "acceleration",
+
+  "unit": "\\meter\\per\\second\\squared",
+
+  "ranges": {
+
+    "phys": {
+      "min": -156.9064,
+      "max": 156.9064,
+      "siExp": 0,
+      "si": [0.0, 1.0, -2.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+      "dsi": "\\meter\\per\\second\\squared"
+    },
+
+    "physROC": {
+      "min": -15690.64,
+      "max": 15690.64,
+      "siExp": 0,
+      "si": [0.0, 1.0, -3.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+      "dsi": "\\meter\\per\\second\\cubed"
+    },
+
+    "elec": {
+      "min": -32768.0,
+      "max": 32767.0,
+      "siExp": 0,
+      "si": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+      "dsi": "\\one"
+    },
+
+    "sampling": {
+      "min": 0.00015,
+      "max": 0.625,
+      "siExp": 0,
+      "si": [0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+      "dsi": "\\second"
+    },
+
+    "threshold": {
+      "min": -156.9064,
+      "max": 156.9064
     }
+
   },
   "properties": {
-    "fullScaleRange": 2,
-    "outputDataRate": 104.0
+
+    "responseTime": 0.00015,
+    "responseTimeSiExp": 0,
+    "responseTimeSi": [0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+    "responseTimeDsi": "\\second",
+
+    "readingConsumption": 6.24,
+    "readingConsumptionSiExp": -6,
+    "readingConsumptionSi": [0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0],
+    "readingConsumptionDsi": "\\coulomb"
+  },
+  "calibration": {
+
+    "type": "linear",
+    "coefficients": [
+      0.0,
+      0.0047856
+    ],
+    "calibrationCoefficients": {
+      "A": { "siExp": 0, "si": [0.0, 1.0, -2.0, 0.0, 0.0, 0.0, 0.0, 0.0], "dsi": "\\meter\\per\\second\\squared" },
+      "B": { "siExp": 0, "si": [0.0, 1.0, -2.0, 0.0, 0.0, 0.0, 0.0, 0.0], "dsi": "\\meter\\per\\second\\squared" }
+      }
+
+    },
+    "metrology": {
+
+     "comment": "To be implemented",
+
+    "UncertaintyPdf": "gaussian",
+    "Uncertainty": [
+      { "referenceValue": 0.0,
+        "absUncertainty": 0.0,
+        "uc": 0.0,
+        "k": 2.0
+      }
+    ],
+
+    "calDate": 0,
+    "calPeriod": 365,
+    "certificateId": ""
   }
 }

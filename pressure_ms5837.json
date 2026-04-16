@@ -1,29 +1,114 @@
 {
-  "modelName": "pressure_ms5837",
+  "schemaVersion": "1.0.0",
+  
+  "modelName": "PressureSensorMS5837",
+  
+  "mpn": "MS5837-02BA01",
+  "manufacturer": "TE Connectivity",
+  "datasheet": "https://www.te.com/usa-en/product-MS5837-02BA01.html",
+  "templateId": 203,
+
   "type": "pressure",
-  "unit": "mbar",
+
+  "unit": "\\millibar",
+
   "ranges": {
+
     "phys": {
-      "min": 0.0,
-      "max": 30000.0
+      "min": 10.0,
+      "max": 2000.0,
+      "siExp": 2,
+      "si": [0, -1, -2, 0, 0, 0, 1, 0],
+      "dsi": "\\millibar"
     },
+
+    "physROC": {
+      "min": 0.0,
+      "max": 2000.0,
+      "siExp": 2,
+      "si": [0, -1, -3, 0, 0, 0, 1, 0],
+      "dsi": "\\millibar\\per\\second"
+    },
+
+    "elec": {
+      "min": 0.0,
+      "max": 16777215.0,
+      "siExp": 0,
+      "si": [0, 0, 0, 0, 0, 0, 0, 0],
+      "dsi": "\\one"
+    },
+
     "sampling": {
-      "min": 0.000001,
-      "max": 50.0
+      "min": 0.0172,
+      "max": 0.0,
+      "siExp": 0,
+      "si": [0, 0, 1, 0, 0, 0, 0, 0],
+      "dsi": "\\second"
     },
+
     "threshold": {
-      "min": 0.0,
-      "max": 30000.0
+      "min": 10.0,
+      "max": 2000.0
     }
-  },
-  "conversion": {
-    "type": "linear",
-    "a": 1.0,
-    "b": 0.0
+
   },
   "properties": {
-    "readingConsumption": 0.000025,
-    "standbyConsumption": 0.1,
-    "fluidDensity": 1025.0
+
+    "responseTime": 0.0172,
+    "responseTimeSiExp": 0,
+    "responseTimeSi": [0, 0, 1, 0, 0, 0, 0, 0],
+    "responseTimeDsi": "\\second",
+
+    "readingConsumption": 21.5,
+    "readingConsumptionSiExp": -6,
+    "readingConsumptionSi": [0, 0, 1, 1, 0, 0, 0, 0],
+    "readingConsumptionDsi": "\\coulomb"
+  },
+  "calibration": {
+
+    "type": "second-order",
+    "coefficients": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "calibrationCoefficients": {
+      "A": { "siExp": 0, "si": [0, 0, 0, 0, 0, 0, 0, 0], "dsi": "\\one" },
+      "B": { "siExp": 0, "si": [0, 0, 0, 0, 0, 0, 0, 0], "dsi": "\\one" },
+      "C": { "siExp": 0, "si": [0, 0, 0, 0, 0, 0, 0, 0], "dsi": "\\one" },
+      "D": { "siExp": 0, "si": [0, 0, 0, 0, 0, 0, 0, 0], "dsi": "\\one" },
+      "E": { "siExp": 0, "si": [0, 0, 0, 0, 0, 0, 0, 0], "dsi": "\\one" },
+      "F": { "siExp": 0, "si": [0, 0, 0, 0, 0, 0, 0, 0], "dsi": "\\one" }
+    }
+  },
+  "metrology": {
+
+
+    "evaluationFormula": "uB",
+
+
+    "requiredInputs": [],
+
+    "readingUncertainty": [
+        { "varName": "absUncertainty", "value": 4.0, "PDF": "uniform", "description": "Worst-case scenario" },
+        { "varName": "uB", "value": 2.31, "description": "" },
+        { "varName": "coverageFactor", "value": 2.0, "description": ""}
+    ],
+
+    "UncertaintyPdf": "gaussian",
+    "Uncertainty": [
+      { "referenceValue": 0,
+        "absUncertainty": 0,
+        "uc": 0,
+        "k": 2.0
+      }
+    ],
+
+    "calDate": 0,
+    "calPeriod": 365,
+    "certificateId": ""
   }
 }

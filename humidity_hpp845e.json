@@ -1,22 +1,110 @@
 {
-  "modelName": "humidity_hpp845e",
+  "schemaVersion": "1.0.0",
+  
+  "modelName": "HumiditySensorHTU21D",
+  
+  "mpn": "HPP845E031R4",
+  "manufacturer": "TE Connectivity",
+  "datasheet": "https://www.te.com/commerce/DocumentDelivery/DDEController?Action=srchrtrv&DocNm=HPC199_6&DocType=Data+Sheet&DocLang=English",
+  "templateId": 202,
+
   "type": "humidity",
-  "unit": "percent",
+
+  "unit": "\\percent",
+
   "ranges": {
+
     "phys": {
+      "min": 0.0,
+      "max": 100.0,
+      "siExp": 0,
+      "si": [0, 0, 0, 0, 0, 0, 0, 0],
+      "dsi": "\\percent"
+    },
+
+    "physROC": {
+      "min": 0.0,
+      "max": 100.0,
+      "siExp": 0,
+      "si": [0, 0, -1, 0, 0, 0, 0, 0],
+      "dsi": "\\percent\\per\\second"
+    },
+
+    "elec": {
+      "min": 0.0,
+      "max": 16384.0,
+      "siExp": 0,
+      "si": [0, 0, 0, 0, 0, 0, 0, 0],
+      "dsi": "\\one"
+    },
+
+    "sampling": {
+      "min": 0.016,
+      "max": 0.0,
+      "siExp": 0,
+      "si": [0, 0, 1, 0, 0, 0, 0, 0],
+      "dsi": "\\second"
+    },
+
+    "threshold": {
       "min": 0.0,
       "max": 100.0
     }
+
   },
-  "conversion": {
+  "properties": {
+
+    "responseTime": 5.0,
+    "responseTimeSiExp": 0,
+    "responseTimeSi": [0, 0, 1, 0, 0, 0, 0, 0],
+    "responseTimeDsi": "\\second",
+
+
+    "readingConsumption": 0.224,
+    "readingConsumptionSiExp": -6,
+    "readingConsumptionSi": [0, 0, 1, 1, 0, 0, 0, 0],
+    "readingConsumptionDsi": "\\coulomb"
+  },
+  "calibration": {
+
     "type": "polynomial",
     "coefficients": [
       0.0,
       0.0,
+      0.0,
       0.0
-    ]
+    ],
+    "calibrationCoefficients": {
+      "A": { "siExp": 0, "si": [0, 0, 0, 0, 0, 0, 0, 0], "dsi": "\\percent" },
+      "B": { "siExp": 0, "si": [0, 0, 0, 0, 0, 0, 0, 0], "dsi": "\\percent" },
+      "C": { "siExp": 0, "si": [0, 0, 0, 0, 0, 0, 0, 0], "dsi": "\\percent" },
+      "D": { "siExp": 0, "si": [0, 0, 0, 0, 0, 0, 0, 0], "dsi": "\\percent" }
+    }
   },
-  "properties": {
-    "responseTime": 5.0
+  "metrology": {
+
+    "evaluationFormula": "uB",
+
+    "requiredInputs": [],
+
+    "readingUncertainty": [
+      { "varName": "absUncertainty", "value": 5.0, "PDF": "uniform", "description": "Worst-case scenario at 25°C" },
+      { "varName": "uB", "value": 2.9, "description": "" },
+      { "varName": "coverageFactor", "value": 2.0, "description": "" }
+    ],
+
+
+    "UncertaintyPdf": "gaussian",
+    "Uncertainty": [
+      { "referenceValue": 0,
+        "absUncertainty": 0,
+        "uc": 0,
+        "k": 2.0
+      }
+    ],
+
+    "calDate": 0,
+    "calPeriod": 365,
+    "certificateId": ""
   }
 }
