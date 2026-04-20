@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "1.0.1",
   
   "modelName": "TemperatureSensorNTC",
   
@@ -93,12 +93,13 @@
     "requiredInputs": [],
 
     "readingUncertainty": [
+        { "varName": "resolution", "value": 0.1,  "PDF": "uniform", "description": "" },
         { "varName": "absUncertainty", "value": 5.0, "PDF": "uniform", "description": "" },
-        { "varName": "uB", "value": 2.9, "description": "" },
+        { "varName": "uB", "value": 2.9,  "PDF": "normal", "description": "" },
         {"varName": "coverageFactor", "value": 2.0, "description": ""}
     ],
 
-    "UncertaintyPdf": "gaussian",
+    "UncertaintyPdf": "normal",
     "Uncertainty": [
       { "referenceValue": 0,
         "absUncertainty": 0,
