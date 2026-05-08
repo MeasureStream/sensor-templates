@@ -11,6 +11,7 @@
   "type": "temperature_calibrator",
 
   "unit": "\\degreeCelsius",
+  "elecUnit": "\\degreeCelsius",
 
   "ranges": {
     "phys": {
@@ -69,8 +70,8 @@
       { 
         "referenceValue": 0,
         "absUncertainty": 0.2,
-        "uc": 0.1,
-        "k": 2.0
+        "ub": 0.15,
+        "k": 2.0,
       }
     ],
 
