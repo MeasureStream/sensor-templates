@@ -12,6 +12,8 @@
 
   "unit": "\\degreeCelsius",
 
+  "elecUnit": "\\one",
+
   "ranges": {
 
     "phys": {
