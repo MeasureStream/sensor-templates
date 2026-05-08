@@ -95,7 +95,7 @@
     "requiredInputs": [],
 
     "readingUncertainty": [
-        { "varName": "resolution", "value": 0.1,  "PDF": "uniform", "description": "" },
+        { "varName": "resolution", "value": 1,  "PDF": "uniform", "description": "" },
         { "varName": "absUncertainty", "value": 5.0, "PDF": "uniform", "description": "" },
         { "varName": "uB", "value": 2.9,  "PDF": "normal", "description": "" },
         {"varName": "coverageFactor", "value": 2.0, "description": ""}
