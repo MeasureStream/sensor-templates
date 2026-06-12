@@ -10,9 +10,10 @@
 
   "type": "temperature",
 
+  "usercomment_0": "The measurement are provided with the unit reporte hereafter (namely 'unit')",
   "unit": "\\degreeCelsius",
 
-  "usercomment_1": "elecUnit and elec array is relative to the reading values of the sensor",
+  "usercomment_1": "elecUnit and elec array are relative to the reading values of the sensor, to be used along with the readingUncertainty parameters",
   "elecUnit": "\\one",
 
   "ranges": {
