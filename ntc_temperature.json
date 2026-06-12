@@ -12,6 +12,7 @@
 
   "unit": "\\degreeCelsius",
 
+  "usercomment_1": "elecUnit and elec array is relative to the reading values of the sensor",
   "elecUnit": "\\one",
 
   "ranges": {
@@ -105,6 +106,7 @@
 
 
     "Uncertainty": [
+       { "varName": "maxTollerance", "value": 0.6,
        { "varName": "ufit", "value": 0.032, "coverageFactor": 2.0, "PDF": "normal", "description": "" }
     ],
 
