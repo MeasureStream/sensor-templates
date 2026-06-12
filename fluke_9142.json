@@ -2,6 +2,10 @@
   "schemaVersion": "1.0.0",
   
   "modelName": "FieldMetrologyWell_9142",
+  "calibrationCertificateID": "012-00000",
+  "issuedBy": "LAT-999",
+  "calDate": 0,
+  "calPeriod": 365,
   
   "mpn": "9142",
   "manufacturer": "Fluke / Hart Scientific",
@@ -75,8 +79,6 @@
       }
     ],
 
-    "calDate": 0,
-    "calPeriod": 365,
-    "certificateId": ""
+
   }
 }
