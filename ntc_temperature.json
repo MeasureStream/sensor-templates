@@ -100,17 +100,12 @@
     "readingUncertainty": [
         { "varName": "resolution", "value": 1,  "PDF": "uniform", "description": "" },
         { "varName": "absUncertainty", "value": 5.0, "PDF": "uniform", "description": "" },
-        { "varName": "uB", "value": 2.9,  "coverageFactor": 2.0, "PDF": "normal", "description": "" },
-        { "varName": "ufit", "value": 0.032, "coverageFactor": 2.0, "PDF": "normal", "description": "" }
+        { "varName": "uB", "value": 2.9,  "coverageFactor": 2.0, "PDF": "normal", "description": "absUncertainty/sqrt(3)" }
     ],
 
-    "UncertaintyPdf": "normal",
+
     "Uncertainty": [
-      { "referenceValue": 0,
-        "absUncertainty": 0,
-        "uc": 0,
-        "k": 2.0
-      }
+       { "varName": "ufit", "value": 0.032, "coverageFactor": 2.0, "PDF": "normal", "description": "" }
     ],
 
     "calDate": 0,
