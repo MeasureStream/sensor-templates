@@ -106,7 +106,7 @@
 
 
     "Uncertainty": [
-       { "varName": "maxTollerance", "value": 0.6},
+       { "varName": "maxTollerance", "value": 0.5, "PDF": "uniform", "description": ""},
        { "varName": "ufit", "value": 0.032, "coverageFactor": 2.0, "PDF": "normal", "description": "" }
     ],
 
