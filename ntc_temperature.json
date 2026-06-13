@@ -75,7 +75,7 @@
   },
   "calibration": {
 
-    "type": "qubic-interpolation",
+    "type": "linear",
     "coefficients": [
       0.0,
       0.0,
