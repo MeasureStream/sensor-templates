@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.0.2",
+  "schemaVersion": "2.0.0",
   
   "modelName": "TemperatureSensorNTC",
   
@@ -31,7 +31,7 @@
       "max": 105.0,
       "siExp": 0,
       "si": [0, 0, -1, 0, 1, 0, 0, 0],
-      "dsi": "\\degreeCelsius\\per\\second"
+      "dsi": "\\kelvin\\per\\second"
     },
 
     "elec": {
@@ -61,7 +61,7 @@
     "responseTime": 0.16,
     "responseTimeSiExp": 0,
     "responseTimeSi": [0, 0, 1, 0, -1, 0, 0, 0],
-    "responseTimeDsi": "\\second\\per\\degreeCelsius",
+    "responseTimeDsi": "\\second\\per\\kelvin",
 
     "selfHeat": 0.0,
     "selfHeatSiExp": 0,
@@ -75,20 +75,76 @@
   },
   "calibration": {
 
-    "type": "linear",
-    "coefficients": [
-      0.0,
-      0.0,
-      0.0,
-      0.0
-    ],
-    "calibrationCoefficients": {
-      "A": { "siExp": 0, "si": [0, 0, 0, 0, 1, 0, 0, 0], "dsi": "\\degreeCelsius" },
-      "B": { "siExp": 0, "si": [0, 0, 0, 0, 1, 0, 0, 0], "dsi": "\\degreeCelsius" },
-      "C": { "siExp": 0, "si": [0, 0, 0, 0, 1, 0, 0, 0], "dsi": "\\degreeCelsius" },
-      "D": { "siExp": 0, "si": [0, 0, 0, 0, 1, 0, 0, 0], "dsi": "\\degreeCelsius" }
+
+  "type": "steinhart_201",
+
+  "steinhart_201": "1.0 / (c[0] + c[1] * ln(4095.0 / x - 1.0) + c[2] * ln(4095.0 / x - 1.0)**3)",
+  "input": ["x"],
+  
+  "usercomment_3": "If wrong conversion, try c[1]=5.984e-4",
+  "c": [
+    {
+      "id": 0,
+      "value": 3.19414e-3,
+      "siExp": 0,
+      "si": [0, 0, 0, 0, -1, 0, 0, 0],
+      "dsi": "\\kelvin\\tothe{-1}"
+    },
+    {
+      "id": 1,
+      "value": 2.401e-4,
+      "siExp": 0,
+      "si": [0, 0, 0, 0, -1, 0, 0, 0],
+      "dsi": "\\kelvin\\tothe{-1}"
+    },
+    {
+      "id": 2,
+      "value": -1.649e-9,
+      "siExp": 0,
+      "si": [0, 0, 0, 0, -1, 0, 0, 0],
+      "dsi": "\\kelvin\\tothe{-1}"
+    },
+    {
+      "id": 3,
+      "value": 0.0,
+      "siExp": 0,
+      "si": [0, 0, 0, 0, -1, 0, 0, 0],
+      "dsi": "\\kelvin\\tothe{-1}"
     }
+  ],
+
+  "usercomment_4": "The following is an old semantic, kept for backward compatibility. Schema version <2.0.0",
+
+  "coefficients": [
+    3.19414e-3,
+    2.401e-4,
+    -1.649e-9,
+    0.0
+  ],
+  "calibrationCoefficients": {
+    "A": { 
+      "siExp": 0, 
+      "si": [0, 0, 0, 0, -1, 0, 0, 0], 
+      "dsi": "\\kelvin\\tothe{-1}" 
+    },
+    "B": { 
+      "siExp": 0, 
+      "si": [0, 0, 0, 0, -1, 0, 0, 0], 
+      "dsi": "\\kelvin\\tothe{-1}" 
+    },
+    "C": { 
+      "siExp": 0, 
+      "si": [0, 0, 0, 0, -1, 0, 0, 0], 
+      "dsi": "\\kelvin\\tothe{-1}" 
+    },
+    "D": { 
+      "siExp": 0, 
+      "si": [0, 0, 0, 0, -1, 0, 0, 0], 
+      "dsi": "\\kelvin\\tothe{-1}" 
+    }
+  }
   },
+
   "metrology": {
 
     "evaluationFormula": "uB",
