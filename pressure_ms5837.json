@@ -8,7 +8,8 @@
   "datasheet": "https://www.te.com/usa-en/product-MS5837-02BA01.html",
   "templateId": 203,
 
-  "type": "pressure",
+  "type": "barometer",
+  "quantity": "pressure",
 
   "unit": "\\millibar",
 

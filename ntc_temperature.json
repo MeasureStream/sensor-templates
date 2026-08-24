@@ -8,7 +8,8 @@
   "datasheet": "https://www.vishay.com/docs/29110/ntclp450e3.pdf",
   "templateId": 201,
 
-  "type": "temperature",
+  "type": "thermometer",
+  "quantity": "temperature",
 
   "usercomment_0": "The measurement are provided with the unit reporte hereafter (namely 'unit')",
   "unit": "\\degreeCelsius",

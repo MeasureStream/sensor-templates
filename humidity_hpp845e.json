@@ -8,7 +8,8 @@
   "datasheet": "https://www.te.com/commerce/DocumentDelivery/DDEController?Action=srchrtrv&DocNm=HPC199_6&DocType=Data+Sheet&DocLang=English",
   "templateId": 202,
 
-  "type": "humidity",
+  "type": "hygrometer",
+  "quantity": "humidity",
 
   "unit": "\\percent",
 

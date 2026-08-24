@@ -8,7 +8,9 @@
   "datasheet": "https://www.st.com/resource/en/datasheet/lsm6dsm.pdf",
   "templateId": 204,
 
-  "type": "acceleration",
+  "type": "accelerometer",
+  "quantity": "acceleration",
+
 
   "unit": "\\meter\\per\\second\\squared",
 

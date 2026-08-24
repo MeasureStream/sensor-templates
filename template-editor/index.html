@@ -1,0 +1,1261 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MeasureStream — Editor Template Sensori</title>
+<style>
+  :root{
+    --ms-teal:#16697A; --ms-sky:#489FB5; --ms-powder:#82C0CC;
+    --ms-offwhite:#EDE7E3; --ms-orange:#FFA62B; --ms-green:#D6EAD4;
+    --ms-sage:#97A675; --ms-brick:#B04A3A;
+    --line:#d6d0cb; --ink:#1d2b30; --muted:#6a7a80;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font:14px/1.45 system-ui,Segoe UI,Roboto,sans-serif;background:var(--ms-offwhite);color:var(--ink)}
+  header{position:sticky;top:0;z-index:20;background:#fff;border-bottom:2px solid var(--ms-powder);padding:10px 16px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+  header h1{font-size:16px;margin:0 12px 0 0;color:var(--ms-teal);letter-spacing:.3px}
+  .grow{flex:1}
+  button{font:inherit;cursor:pointer;border-radius:4px;border:1px solid var(--ms-sky);background:#fff;color:var(--ms-teal);padding:5px 10px}
+  button:hover{background:var(--ms-green)}
+  button.primary{background:var(--ms-teal);color:#fff;border-color:var(--ms-teal)}
+  button.primary:hover{background:var(--ms-sky)}
+  button.danger{border-color:var(--ms-brick);color:var(--ms-brick)}
+  button.danger:hover{background:#f6e3e0}
+  button:disabled{opacity:.4;cursor:not-allowed}
+  button.mini{padding:2px 7px;font-size:12px}
+  input,select,textarea{font:inherit;border:1px solid var(--line);border-radius:4px;padding:4px 6px;background:#fff;color:var(--ink);width:100%}
+  input:focus,select:focus,textarea:focus{outline:2px solid var(--ms-powder);outline-offset:-1px}
+  input.bad{border-color:var(--ms-brick);background:#fdf2f0}
+  textarea{font-family:ui-monospace,Consolas,monospace;font-size:12px;min-height:70px;resize:vertical}
+  main{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:14px;padding:14px;align-items:start}
+  @media (max-width:1100px){main{grid-template-columns:1fr}}
+  section.card{background:#fff;border:1px solid var(--line);border-radius:6px;margin-bottom:12px;overflow:hidden}
+  section.card>h2{margin:0;padding:8px 12px;font-size:13px;text-transform:uppercase;letter-spacing:.6px;background:var(--ms-green);color:var(--ms-teal);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:8px;cursor:pointer}
+  section.card>h2 .caret{font-size:11px;color:var(--muted)}
+  section.card>.body{padding:12px}
+  section.card.collapsed>.body{display:none}
+  .grid{display:grid;gap:10px}
+  .g2{grid-template-columns:1fr 1fr}
+  .g3{grid-template-columns:1fr 1fr 1fr}
+  .g4{grid-template-columns:repeat(4,1fr)}
+  @media (max-width:760px){.g2,.g3,.g4{grid-template-columns:1fr}}
+  label.f{display:block}
+  label.f>span{display:block;font-size:11px;color:var(--muted);margin-bottom:2px;text-transform:uppercase;letter-spacing:.4px}
+  .req::after{content:" *";color:var(--ms-brick);font-weight:700}
+  .hint{font-size:11px;color:var(--muted);margin-top:3px}
+  .item{border:1px solid var(--line);border-left:3px solid var(--ms-powder);border-radius:5px;padding:10px;margin-bottom:10px;background:#fcfbfa}
+  .item.locked{border-left-color:var(--ms-teal)}
+  .item>.head{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+  .item>.head .name{font-weight:600;color:var(--ms-teal)}
+  .item>.head input.name{max-width:240px;font-weight:600}
+  .tag{font-size:10px;text-transform:uppercase;letter-spacing:.5px;border:1px solid var(--ms-sage);color:var(--ms-sage);border-radius:3px;padding:1px 5px}
+  .tag.req{border-color:var(--ms-brick);color:var(--ms-brick)}
+  .si{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:4px}
+  .si label{display:block;text-align:center}
+  .si label span{display:block;font-size:10px;color:var(--muted)}
+  .si input{text-align:center;padding:3px 2px}
+  .banner{margin:0;padding:12px 16px;background:#fdf2f0;border-bottom:3px solid var(--ms-brick);color:#5c1f14;display:none}
+  .banner.on{display:block}
+  .banner b{color:var(--ms-brick);text-transform:uppercase;letter-spacing:.5px}
+  .banner ul{margin:6px 0 0 18px;padding:0}
+  pre#out{margin:0;padding:12px;background:#0f1c21;color:#dfe9ec;font:12px/1.5 ui-monospace,Consolas,monospace;overflow:auto;max-height:calc(100vh - 210px);border-radius:0 0 6px 6px}
+  .side{position:sticky;top:60px}
+  .msgs{padding:8px 12px;font-size:12px;max-height:170px;overflow:auto}
+  .msg{padding:2px 0}
+  .msg.err{color:var(--ms-brick)}
+  .msg.warn{color:#8a6d1f}
+  .msg.ok{color:var(--ms-sage)}
+  .rowbtn{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+  .legacybox{background:#fdf6f5;border:1px dashed var(--ms-brick);border-radius:5px;padding:8px;margin-top:10px}
+  .legacybox pre{margin:6px 0 0;font:11px/1.4 ui-monospace,Consolas,monospace;white-space:pre-wrap;max-height:240px;overflow:auto}
+  .overlay{position:fixed;inset:0;background:rgba(15,28,33,.55);display:none;z-index:60;padding:20px;overflow:auto}
+  .overlay.on{display:block}
+  .sheet{max-width:1040px;margin:0 auto;background:#fff;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+  .sheet .bar{display:flex;gap:10px;align-items:center;padding:10px 14px;background:var(--ms-green);border-bottom:1px solid var(--line)}
+  .sheet .bar h3{margin:0;font-size:14px;color:var(--ms-teal);text-transform:uppercase;letter-spacing:.6px}
+  .sheet .content{padding:14px;max-height:calc(100vh - 140px);overflow:auto}
+  .sum{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+  .pill{border:1px solid var(--line);border-radius:4px;padding:3px 9px;font-size:12px;background:#fcfbfa}
+  .pill.ok{border-color:var(--ms-sage);color:var(--ms-sage)}
+  .pill.err{border-color:var(--ms-brick);color:var(--ms-brick)}
+  .pill.leg{border-color:var(--ms-orange);color:#8a5c04}
+  .rep{border:1px solid var(--line);border-left:3px solid var(--ms-sage);border-radius:5px;margin-bottom:10px;background:#fcfbfa}
+  .rep.bad{border-left-color:var(--ms-brick)}
+  .rep>.h{display:flex;gap:8px;align-items:center;padding:8px 10px;flex-wrap:wrap}
+  .rep>.h .fn{font-weight:600;color:var(--ms-teal);font-family:ui-monospace,Consolas,monospace}
+  .rep .msgs{padding:0 10px 10px;font-size:12px}
+  .drop{position:fixed;inset:0;background:rgba(22,105,122,.85);color:#fff;display:none;align-items:center;justify-content:center;font-size:22px;z-index:99}
+  .drop.on{display:flex}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>MeasureStream · Editor Template Sensori</h1>
+  <select id="quickstart" style="width:auto">
+    <option value="">Nuovo da…</option>
+    <option value="generic">generico</option>
+    <option value="temperature">temperatura</option>
+    <option value="humidity">umidità</option>
+    <option value="pressure">pressione</option>
+    <option value="acceleration">accelerazione</option>
+  </select>
+  <button id="btnOpen">Apri JSON…</button>
+  <button id="btnVal">Valida file…</button>
+  <button id="btnValDir">Valida cartella…</button>
+  <input type="file" id="file" accept=".json,application/json" hidden>
+  <input type="file" id="fileVal" accept=".json,application/json" multiple hidden>
+  <input type="file" id="dirVal" webkitdirectory directory hidden>
+  <span class="grow"></span>
+  <input id="fname" style="width:230px" title="nome file di output">
+  <button id="btnCopy">Copia</button>
+  <button id="btnSave" class="primary">Scarica JSON</button>
+</header>
+
+<div class="banner" id="banner"></div>
+
+<main>
+  <div id="form"></div>
+  <div class="side">
+    <section class="card">
+      <h2 data-toggle>Validazione <span id="vcount" class="tag"></span></h2>
+      <div class="body" style="padding:0"><div class="msgs" id="msgs"></div></div>
+    </section>
+    <section class="card">
+      <h2 data-toggle>Anteprima JSON</h2>
+      <div class="body" style="padding:0"><pre id="out"></pre></div>
+    </section>
+  </div>
+</main>
+
+<div class="drop" id="drop">Rilascia qui uno o più file .json</div>
+
+<div class="overlay" id="overlay">
+  <div class="sheet">
+    <div class="bar">
+      <h3>Validazione template esistenti</h3>
+      <span class="grow" style="flex:1"></span>
+      <button id="repCopy">Copia report</button>
+      <button id="repClose" class="primary">Chiudi</button>
+    </div>
+    <div class="content" id="repBody"></div>
+  </div>
+</div>
+
+<script>
+"use strict";
+
+/* =======================================================================
+   COSTANTI CONFIGURABILI
+   -----------------------------------------------------------------------
+   SI_LABELS: etichette dei uscite 8 slot del vettore "si".
+   Gli indici 1(m) 2(s) 3(A) 4(K) 6(kg) sono ricavati con certezza dai
+   template esistenti (es. \coulomb -> [0,0,1,1,0,0,0,0] = s*A ;
+   \millibar -> [0,-1,-2,0,0,0,1,0] = kg*m^-1*s^-2).
+   Gli slot 0, 5, 7 non compaiono mai valorizzati: le etichette sono
+   un'ipotesi (riservato / mol / cd). Correggerle qui se necessario.
+   ======================================================================= */
+const SI_LABELS = ["?", "m", "s", "A", "K", "mol", "kg", "cd"];
+const SI_TITLES = ["slot 0 — non usato nei template esistenti (ipotesi: adimensionale/angolo)",
+  "metro", "secondo", "ampere", "kelvin", "mole (ipotesi)", "chilogrammo", "candela (ipotesi)"];
+
+/* Preset unità: riempiono in un colpo dsi + si + siExp. Stringhe D-SI
+   esattamente come già usate nei template del repo sensor-templates. */
+const UNIT_PRESETS = [
+  { dsi: "\\one",                          si: [0,0,0,0,0,0,0,0],  siExp: 0 },
+  { dsi: "\\percent",                      si: [0,0,0,0,0,0,0,0],  siExp: 0 },
+  { dsi: "\\percent\\per\\second",         si: [0,0,-1,0,0,0,0,0], siExp: 0 },
+  { dsi: "\\degreeCelsius",                si: [0,0,0,0,1,0,0,0],  siExp: 0 },
+  { dsi: "\\kelvin",                       si: [0,0,0,0,1,0,0,0],  siExp: 0 },
+  { dsi: "\\kelvin\\per\\second",          si: [0,0,-1,0,1,0,0,0], siExp: 0 },
+  { dsi: "\\kelvin\\tothe{-1}",            si: [0,0,0,0,-1,0,0,0], siExp: 0 },
+  { dsi: "\\second",                       si: [0,0,1,0,0,0,0,0],  siExp: 0 },
+  { dsi: "\\second\\per\\kelvin",          si: [0,0,1,0,-1,0,0,0], siExp: 0 },
+  { dsi: "\\meter",                        si: [0,1,0,0,0,0,0,0],  siExp: 0 },
+  { dsi: "\\meter\\per\\second\\squared",  si: [0,1,-2,0,0,0,0,0], siExp: 0 },
+  { dsi: "\\meter\\per\\second\\cubed",    si: [0,1,-3,0,0,0,0,0], siExp: 0 },
+  { dsi: "\\coulomb",                      si: [0,0,1,1,0,0,0,0],  siExp: -6 },
+  { dsi: "\\millibar",                     si: [0,-1,-2,0,0,0,1,0],siExp: 2 },
+  { dsi: "\\millibar\\per\\second",        si: [0,-1,-3,0,0,0,1,0],siExp: 2 }
+];
+
+const PDF_OPTIONS = ["uniform", "normal", "triangular", "arcsine", "user"];
+
+/* Blocchi non eliminabili (mandatory) */
+const REQ_RANGES = ["phys", "elec", "sampling", "threshold"];
+const SUGG_RANGES = ["physROC"];
+const MINMAX_ONLY = ["threshold"];
+const REQ_PROPS = ["responseTime", "readingConsumption"];
+const REQ_ROOT = ["schemaVersion","modelName","mpn","manufacturer","datasheet","templateId","type","quantity","unit","elecUnit"];
+const ROOT_ORDER = ["schemaVersion","modelName","mpn","manufacturer","datasheet","templateId","type","quantity","unit","elecUnit"];
+
+/* type = tipo di sensore (accelerometer), quantity = grandezza misurata
+   (acceleration). QUANTITY_NAMES serve solo all'euristica che segnala i
+   template in cui type contiene ancora una grandezza. */
+const QUANTITY_NAMES = ["acceleration","temperature","humidity","pressure","velocity","displacement",
+  "strain","force","torque","voltage","current","resistance","frequency","illuminance","flow","level",
+  "mass","angle","angular_velocity","magnetic_flux_density","power","energy","ph","conductivity"];
+const TYPE_NAMES = ["accelerometer","thermometer","thermistor","rtd","thermocouple","hygrometer",
+  "barometer","pressure_sensor","load_cell","strain_gauge","gyroscope","magnetometer",
+  "temperature_calibrator","pressure_calibrator"];
+const CURRENT_SCHEMA = "2.0.0";
+
+/* ======================= UTILITY ======================= */
+const $ = (s, r = document) => r.querySelector(s);
+function el(tag, attrs, kids) {
+  const n = document.createElement(tag);
+  if (attrs) for (const k in attrs) {
+    if (k === "class") n.className = attrs[k];
+    else if (k === "html") n.innerHTML = attrs[k];
+    else if (k === "text") n.textContent = attrs[k];
+    else if (k.startsWith("on")) n.addEventListener(k.slice(2), attrs[k]);
+    else if (attrs[k] !== null && attrs[k] !== undefined) n.setAttribute(k, attrs[k]);
+  }
+  (kids || []).forEach(c => c && n.appendChild(typeof c === "string" ? document.createTextNode(c) : c));
+  return n;
+}
+const clone = o => JSON.parse(JSON.stringify(o));
+const isObj = v => v && typeof v === "object" && !Array.isArray(v);
+const isComment = k => /^usercomment/i.test(k);
+function numOrNull(s) { if (s === "" || s === null || s === undefined) return null; const n = Number(s); return Number.isFinite(n) ? n : null; }
+function cmpVer(a, b) {
+  const pa = String(a || "0").split(".").map(Number), pb = String(b || "0").split(".").map(Number);
+  for (let i = 0; i < 3; i++) { const d = (pa[i] || 0) - (pb[i] || 0); if (d) return d; }
+  return 0;
+}
+
+/* Pretty printer: array di primitivi in linea, oggetti "piatti" corti in
+   linea — riproduce lo stile dei template esistenti. */
+function pretty(v, ind) {
+  ind = ind || 0;
+  const pad = " ".repeat(ind), pad2 = " ".repeat(ind + 2);
+  if (v === null || v === undefined) return "null";
+  if (Array.isArray(v)) {
+    if (!v.length) return "[]";
+    if (v.every(x => x === null || typeof x !== "object")) {
+      const one = "[" + v.map(x => JSON.stringify(x)).join(", ") + "]";
+      if (one.length <= 100) return one;
+    }
+    return "[\n" + v.map(x => pad2 + pretty(x, ind + 2)).join(",\n") + "\n" + pad + "]";
+  }
+  if (typeof v === "object") {
+    const ks = Object.keys(v);
+    if (!ks.length) return "{}";
+    const flat = ks.every(k => !isObj(v[k]) && (!Array.isArray(v[k]) || v[k].every(x => typeof x !== "object")));
+    if (flat && !("min" in v)) {
+      const one = "{ " + ks.map(k => JSON.stringify(k) + ": " + pretty(v[k])).join(", ") + " }";
+      if (one.length <= 100) return one;
+    }
+    return "{\n" + ks.map(k => pad2 + JSON.stringify(k) + ": " + pretty(v[k], ind + 2)).join(",\n") + "\n" + pad + "}";
+  }
+  return JSON.stringify(v);
+}
+
+/* ======================= MODELLO ======================= */
+function siBlock(dsi, si, siExp) { return { siExp: siExp || 0, si: si ? si.slice() : [0,0,0,0,0,0,0,0], dsi: dsi || "\\one" }; }
+
+function defaultModel() {
+  return {
+    schemaVersion: CURRENT_SCHEMA,
+    modelName: "", mpn: "", manufacturer: "", datasheet: "", templateId: 205,
+    type: "", quantity: "", unit: "\\one", elecUnit: "\\one",
+    ranges: [
+      { name: "phys",      min: 0,     max: 100,   ...siBlock("\\one"),                     minmaxOnly: false },
+      { name: "physROC",   min: 0,     max: 100,   ...siBlock("\\percent\\per\\second", [0,0,-1,0,0,0,0,0]), minmaxOnly: false },
+      { name: "elec",      min: 0,     max: 65535, ...siBlock("\\one"),                     minmaxOnly: false },
+      { name: "sampling",  min: 0.001, max: 0,     ...siBlock("\\second", [0,0,1,0,0,0,0,0]), minmaxOnly: false },
+      { name: "threshold", min: 0,     max: 100,   ...siBlock("\\one"),                     minmaxOnly: true }
+    ],
+    properties: [
+      { key: "responseTime",       base: "responseTime",       value: 0, ...siBlock("\\second", [0,0,1,0,0,0,0,0]) },
+      { key: "readingConsumption", base: "readingConsumption", value: 0, ...siBlock("\\coulomb", [0,0,1,1,0,0,0,0], -6) }
+    ],
+    calibration: {
+      type: "linear",
+      formula: "c[0] + c[1] * x",
+      input: ["x"],
+      c: [
+        { id: 0, value: 0, ...siBlock("\\one") },
+        { id: 1, value: 1, ...siBlock("\\one") }
+      ],
+      extras: [], comments: [], legacy: null
+    },
+    metrology: {
+      evaluationFormula: "uB",
+      requiredInputs: [],
+      readingUncertainty: [
+        { varName: "resolution",     value: 1, PDF: "uniform", cfKey: "coverageFactor", cf: null, description: "" },
+        { varName: "absUncertainty", value: 0, PDF: "uniform", cfKey: "coverageFactor", cf: null, description: "" },
+        { varName: "uB",             value: 0, PDF: "normal",  cfKey: "coverageFactor", cf: 2,    description: "absUncertainty/sqrt(3)" }
+      ],
+      Uncertainty: [],
+      calDate: 0, calPeriod: 365, certificateId: "",
+      extras: [], comments: [], legacy: null,
+      _has: { requiredInputs: true, readingUncertainty: true }
+    },
+    extras: [],
+    comments: [],
+    legacyFlags: [],
+    loadNotes: []
+  };
+}
+
+/* Parsing tollerante: recupera i file con virgole finali (JSON non valido,
+   rifiutato anche da Jackson lato sensor-manager) segnalandolo all'utente. */
+function tolerantParse(text) {
+  try { return { obj: JSON.parse(text), fixed: false }; }
+  catch (e) {
+    const cleaned = text.replace(/,(\s*[}\]])/g, "$1");
+    try { return { obj: JSON.parse(cleaned), fixed: true }; } catch (e2) { throw e; }
+  }
+}
+
+const QUICKSTART = {
+  generic:      null,
+  temperature:  { type: "thermometer",   quantity: "temperature",  unit: "\\degreeCelsius", phys: ["\\degreeCelsius", [0,0,0,0,1,0,0,0], -40, 105], roc: ["\\kelvin\\per\\second", [0,0,-1,0,1,0,0,0]] },
+  humidity:     { type: "hygrometer",    quantity: "humidity",     unit: "\\percent",       phys: ["\\percent", [0,0,0,0,0,0,0,0], 0, 100],         roc: ["\\percent\\per\\second", [0,0,-1,0,0,0,0,0]] },
+  pressure:     { type: "barometer",     quantity: "pressure",     unit: "\\millibar",      phys: ["\\millibar", [0,-1,-2,0,0,0,1,0], 10, 2000, 2],  roc: ["\\millibar\\per\\second", [0,-1,-3,0,0,0,1,0], 2] },
+  acceleration: { type: "accelerometer", quantity: "acceleration", unit: "\\meter\\per\\second\\squared", phys: ["\\meter\\per\\second\\squared", [0,1,-2,0,0,0,0,0], -156.9064, 156.9064], roc: ["\\meter\\per\\second\\cubed", [0,1,-3,0,0,0,0,0]] }
+};
+function quickstart(kind) {
+  const m = defaultModel(), q = QUICKSTART[kind];
+  if (!q) return m;
+  m.type = q.type; m.quantity = q.quantity; m.unit = q.unit;
+  const ph = m.ranges.find(r => r.name === "phys");
+  ph.dsi = q.phys[0]; ph.si = q.phys[1].slice(); ph.min = q.phys[2]; ph.max = q.phys[3]; ph.siExp = q.phys[4] || 0;
+  const th = m.ranges.find(r => r.name === "threshold"); th.min = q.phys[2]; th.max = q.phys[3];
+  const rc = m.ranges.find(r => r.name === "physROC");
+  rc.dsi = q.roc[0]; rc.si = q.roc[1].slice(); rc.siExp = q.roc[2] || 0; rc.min = 0; rc.max = q.phys[3];
+  return m;
+}
+
+/* ======================= PARSING ======================= */
+function pullComments(obj) {
+  const out = [], keys = Object.keys(obj);
+  keys.forEach((k, i) => {
+    if (!isComment(k)) return;
+    let anchor = null;
+    for (let j = i + 1; j < keys.length; j++) if (!isComment(keys[j])) { anchor = keys[j]; break; }
+    out.push({ key: k, text: String(obj[k]), anchor });
+    delete obj[k];
+  });
+  return out;
+}
+function toExtras(obj) {
+  return Object.keys(obj).map(k => {
+    const v = obj[k];
+    if (typeof v === "string") return { key: k, kind: "text", value: v };
+    if (typeof v === "number") return { key: k, kind: "number", value: String(v) };
+    if (typeof v === "boolean") return { key: k, kind: "bool", value: v };
+    return { key: k, kind: "json", value: pretty(v, 0) };
+  });
+}
+
+function parseTemplate(src) {
+  const raw = clone(src), m = defaultModel();
+  m.legacyFlags = [];
+  m.comments = pullComments(raw);
+
+  /* niente valori inventati: i campi obbligatori assenti restano vuoti e
+     vengono segnalati dalla validazione invece di essere riempiti d'ufficio */
+  ROOT_ORDER.forEach(k => { m[k] = (k in raw) ? raw[k] : (k === "templateId" ? 0 : ""); delete raw[k]; });
+  if (cmpVer(m.schemaVersion, CURRENT_SCHEMA) < 0)
+    m.legacyFlags.push('schemaVersion "' + m.schemaVersion + '" &lt; ' + CURRENT_SCHEMA);
+
+  /* ranges */
+  if (isObj(raw.ranges)) {
+    const rc = pullComments(raw.ranges);
+    m.ranges = Object.keys(raw.ranges).map(name => {
+      const r = raw.ranges[name] || {};
+      const only = !("si" in r) && !("dsi" in r);
+      const extra = {};
+      Object.keys(r).forEach(k => { if (!["min","max","siExp","si","dsi"].includes(k)) extra[k] = r[k]; });
+      return {
+        name, minmaxOnly: only,
+        min: r.min ?? 0, max: r.max ?? 0,
+        siExp: r.siExp ?? 0,
+        si: Array.isArray(r.si) ? r.si.slice(0, 8) : [0,0,0,0,0,0,0,0],
+        dsi: r.dsi ?? "\\one",
+        extras: toExtras(extra)
+      };
+    });
+    m.comments = m.comments.concat(rc.map(c => ({ ...c, scope: "ranges" })));
+    delete raw.ranges;
+  }
+
+  /* properties: gruppi <base>, <base>SiExp, <base>Si, <base>Dsi */
+  if (isObj(raw.properties)) {
+    const p = raw.properties, used = new Set();
+    const pc = pullComments(p);
+    const bases = Object.keys(p).filter(k => k.endsWith("SiExp")).map(k => k.slice(0, -5));
+    m.properties = bases.map(base => {
+      let vk = (base in p) ? base : Object.keys(p).find(k => k.startsWith(base) && !k.endsWith("SiExp") && !k.endsWith("Si") && !k.endsWith("Dsi") && !used.has(k));
+      [vk, base + "SiExp", base + "Si", base + "Dsi"].forEach(k => k && used.add(k));
+      return {
+        key: vk || base, base,
+        value: vk ? p[vk] : 0,
+        siExp: p[base + "SiExp"] ?? 0,
+        si: Array.isArray(p[base + "Si"]) ? p[base + "Si"].slice(0, 8) : [0,0,0,0,0,0,0,0],
+        dsi: p[base + "Dsi"] ?? "\\one"
+      };
+    });
+    const rest = {}; Object.keys(p).forEach(k => { if (!used.has(k)) rest[k] = p[k]; });
+    m.propExtras = toExtras(rest);
+    m.comments = m.comments.concat(pc.map(c => ({ ...c, scope: "properties" })));
+    delete raw.properties;
+  }
+
+  /* calibration */
+  if (isObj(raw.calibration)) {
+    const cal = raw.calibration, C = m.calibration;
+    C.comments = pullComments(cal);
+    C.type = cal.type ?? ""; delete cal.type;
+    C.formula = typeof cal[C.type] === "string" ? cal[C.type] : "";
+    if (C.formula) delete cal[C.type];
+    C.input = Array.isArray(cal.input) ? cal.input.slice() : []; delete cal.input;
+    C.c = Array.isArray(cal.c) ? cal.c.map((x, i) => ({
+      id: x.id ?? i, value: x.value ?? 0, siExp: x.siExp ?? 0,
+      si: Array.isArray(x.si) ? x.si.slice(0, 8) : [0,0,0,0,0,0,0,0], dsi: x.dsi ?? "\\one"
+    })) : [];
+    delete cal.c;
+    const leg = {};
+    ["coefficients", "calibrationCoefficients"].forEach(k => { if (k in cal) { leg[k] = cal[k]; delete cal[k]; } });
+    if (Object.keys(leg).length) {
+      C.legacy = leg;
+      m.legacyFlags.push("calibration." + Object.keys(leg).join(" / calibration."));
+    }
+    C.extras = toExtras(cal);
+    delete raw.calibration;
+  }
+
+  /* metrology */
+  if (isObj(raw.metrology)) {
+    const mt = raw.metrology, M = m.metrology;
+    M.comments = pullComments(mt);
+    M.evaluationFormula = mt.evaluationFormula ?? ""; delete mt.evaluationFormula;
+    const hadRequired = "requiredInputs" in mt;
+    M.requiredInputs = Array.isArray(mt.requiredInputs) ? mt.requiredInputs.slice() : []; delete mt.requiredInputs;
+    const readEntry = e => {
+      const cfKey = ("coverageFactor" in e) ? "coverageFactor" : (("k" in e) ? "k" : "coverageFactor");
+      const extra = {}; Object.keys(e).forEach(k => { if (!["varName","value","PDF","description","coverageFactor","k"].includes(k)) extra[k] = e[k]; });
+      return { varName: e.varName ?? "", value: e.value ?? 0, PDF: e.PDF ?? "", cfKey, cf: e[cfKey] ?? null, description: e.description ?? "", extras: toExtras(extra) };
+    };
+    M._has = { requiredInputs: hadRequired, readingUncertainty: Array.isArray(mt.readingUncertainty) };
+    M.readingUncertainty = Array.isArray(mt.readingUncertainty) ? mt.readingUncertainty.map(readEntry) : [];
+    delete mt.readingUncertainty;
+
+    const legM = {};
+    if ("UncertaintyPdf" in mt) { legM.UncertaintyPdf = mt.UncertaintyPdf; delete mt.UncertaintyPdf; }
+    if (Array.isArray(mt.Uncertainty)) {
+      const oldShape = mt.Uncertainty.some(e => isObj(e) && !("varName" in e));
+      if (oldShape) { legM.Uncertainty = mt.Uncertainty; }
+      else { M.Uncertainty = mt.Uncertainty.map(readEntry); }
+      delete mt.Uncertainty;
+    }
+    if (Object.keys(legM).length) {
+      M.legacy = legM;
+      m.legacyFlags.push("metrology." + Object.keys(legM).join(" / metrology."));
+    }
+    M.calDate = ("calDate" in mt) ? mt.calDate : null; delete mt.calDate;
+    M.calPeriod = ("calPeriod" in mt) ? mt.calPeriod : null; delete mt.calPeriod;
+    M.certificateId = ("certificateId" in mt) ? mt.certificateId : null; delete mt.certificateId;
+    M.extras = toExtras(mt);
+    delete raw.metrology;
+  }
+
+  m.extras = toExtras(raw);
+  return m;
+}
+
+/* ======================= SERIALIZZAZIONE ======================= */
+function buildObj(pairs, comments) {
+  const out = {}, used = new Set();
+  pairs.forEach(([k, v]) => {
+    if (v === undefined) return;
+    (comments || []).forEach(c => { if (c.anchor === k && !used.has(c)) { out[c.key] = c.text; used.add(c); } });
+    out[k] = v;
+  });
+  (comments || []).forEach(c => { if (!used.has(c)) out[c.key] = c.text; });
+  return out;
+}
+function extrasPairs(list) {
+  return (list || []).map(x => {
+    if (!x.key) return null;
+    if (x.kind === "number") return [x.key, numOrNull(x.value) ?? 0];
+    if (x.kind === "bool") return [x.key, !!x.value];
+    if (x.kind === "json") { try { return [x.key, JSON.parse(x.value)]; } catch (e) { return [x.key, x.value]; } }
+    return [x.key, x.value];
+  }).filter(Boolean);
+}
+
+function serialize(m) {
+  const cs = (scope) => m.comments.filter(c => (c.scope || "root") === scope);
+
+  const ranges = buildObj(m.ranges.map(r => {
+    const o = { min: r.min, max: r.max };
+    if (!r.minmaxOnly) { o.siExp = r.siExp; o.si = r.si; o.dsi = r.dsi; }
+    extrasPairs(r.extras).forEach(([k, v]) => o[k] = v);
+    return [r.name, o];
+  }), cs("ranges"));
+
+  const props = {};
+  const propPairs = [];
+  m.properties.forEach(p => {
+    const base = p.base || p.key;
+    propPairs.push([p.key, p.value]);
+    propPairs.push([base + "SiExp", p.siExp]);
+    propPairs.push([base + "Si", p.si]);
+    propPairs.push([base + "Dsi", p.dsi]);
+  });
+  extrasPairs(m.propExtras).forEach(pr => propPairs.push(pr));
+  Object.assign(props, buildObj(propPairs, cs("properties")));
+
+  const C = m.calibration;
+  const calPairs = [["type", C.type]];
+  if (C.formula) calPairs.push([C.type, C.formula]);
+  if (C.input.length) calPairs.push(["input", C.input]);
+  if (C.c.length) calPairs.push(["c", C.c.map(x => ({ id: x.id, value: x.value, siExp: x.siExp, si: x.si, dsi: x.dsi }))]);
+  extrasPairs(C.extras).forEach(p => calPairs.push(p));
+  if (C.legacy) Object.keys(C.legacy).forEach(k => calPairs.push([k, C.legacy[k]]));
+  const calibration = buildObj(calPairs, C.comments);
+
+  const M = m.metrology;
+  const unc = e => {
+    const o = { varName: e.varName, value: e.value };
+    if (e.PDF) o.PDF = e.PDF;
+    if (e.cf !== null && e.cf !== undefined && e.cf !== "") o[e.cfKey || "coverageFactor"] = e.cf;
+    o.description = e.description || "";
+    extrasPairs(e.extras).forEach(([k, v]) => o[k] = v);
+    return o;
+  };
+  const has = M._has || { requiredInputs: true, readingUncertainty: true };
+  const mtPairs = [];
+  if (M.evaluationFormula) mtPairs.push(["evaluationFormula", M.evaluationFormula]);
+  if (M.requiredInputs.length || has.requiredInputs) mtPairs.push(["requiredInputs", M.requiredInputs]);
+  if (M.readingUncertainty.length || has.readingUncertainty) mtPairs.push(["readingUncertainty", M.readingUncertainty.map(unc)]);
+  if (M.legacy && M.legacy.UncertaintyPdf !== undefined) mtPairs.push(["UncertaintyPdf", M.legacy.UncertaintyPdf]);
+  if (M.legacy && M.legacy.Uncertainty !== undefined) mtPairs.push(["Uncertainty", M.legacy.Uncertainty]);
+  else if (M.Uncertainty.length) mtPairs.push(["Uncertainty", M.Uncertainty.map(unc)]);
+  extrasPairs(M.extras).forEach(p => mtPairs.push(p));
+  [["calDate", M.calDate], ["calPeriod", M.calPeriod], ["certificateId", M.certificateId]]
+    .forEach(p => { if (p[1] !== null && p[1] !== undefined) mtPairs.push(p); });
+  const metrology = buildObj(mtPairs, M.comments);
+
+  /* i campi radice lasciati vuoti non vengono emessi: la validazione li
+     segnala come errore invece di scrivere valori fittizi nel file */
+  const rootPairs = ROOT_ORDER.filter(k => m[k] !== "" && m[k] !== null && m[k] !== undefined).map(k => [k, m[k]]);
+  rootPairs.push(["ranges", ranges], ["properties", props], ["calibration", calibration], ["metrology", metrology]);
+  extrasPairs(m.extras).forEach(p => rootPairs.push(p));
+  return buildObj(rootPairs, cs("root"));
+}
+
+/* ======================= VALIDAZIONE ======================= */
+function validate(m) {
+  const msgs = [];
+  const E = t => msgs.push({ l: "err", t });
+  const W = t => msgs.push({ l: "warn", t });
+
+  REQ_ROOT.forEach(k => { if (m[k] === "" || m[k] === null || m[k] === undefined) E("campo obbligatorio mancante: " + k); });
+  if (!/^\d+\.\d+\.\d+$/.test(String(m.schemaVersion))) E("schemaVersion deve avere forma X.Y.Z");
+  if (m.modelName && /\s/.test(m.modelName)) W("modelName contiene spazi (chiave di lookup in TemplateService)");
+  /* type e quantity si contrappongono: accelerometer vs acceleration */
+  if (m.type && QUANTITY_NAMES.includes(m.type.toLowerCase()))
+    W('type = "' + m.type + '" sembra una grandezza: type è il tipo di sensore (es. accelerometer), la grandezza va in quantity (es. acceleration)');
+  if (m.quantity && TYPE_NAMES.includes(m.quantity.toLowerCase()))
+    W('quantity = "' + m.quantity + '" sembra un tipo di sensore: i due campi sono probabilmente invertiti');
+  if (m.type && m.quantity && m.type.toLowerCase() === m.quantity.toLowerCase())
+    W("type e quantity hanno lo stesso valore: devono distinguere il sensore dalla grandezza che misura");
+  if (!Number.isInteger(Number(m.templateId)) || Number(m.templateId) <= 0) E("templateId deve essere un intero > 0 e univoco");
+
+  REQ_RANGES.forEach(n => { if (!m.ranges.some(r => r.name === n)) E("ranges." + n + " è obbligatorio"); });
+  SUGG_RANGES.forEach(n => { if (!m.ranges.some(r => r.name === n)) W("ranges." + n + " assente (raccomandato)"); });
+  const rn = m.ranges.map(r => r.name);
+  rn.forEach((n, i) => { if (!n) E("un blocco ranges ha nome vuoto"); else if (rn.indexOf(n) !== i) E("ranges: nome duplicato «" + n + "»"); });
+  m.ranges.forEach(r => {
+    if (!Number.isFinite(r.min) || !Number.isFinite(r.max)) E("ranges." + r.name + ": min/max non numerici");
+    else if (r.min > r.max && !(r.name === "sampling" && r.max === 0)) W("ranges." + r.name + ": min > max (0 = illimitato)");
+    if (!r.minmaxOnly) {
+      if (!Array.isArray(r.si) || r.si.length !== 8 || r.si.some(x => !Number.isFinite(x))) E("ranges." + r.name + ": vettore si non valido (8 numeri)");
+      if (!r.dsi) E("ranges." + r.name + ": dsi mancante");
+    }
+  });
+
+  REQ_PROPS.forEach(n => { if (!m.properties.some(p => (p.base || p.key) === n)) E("properties." + n + " è obbligatorio"); });
+  m.properties.forEach(p => {
+    if (!p.key) E("una property ha chiave vuota");
+    if (!Number.isFinite(Number(p.value))) E("properties." + p.key + ": valore non numerico");
+    if (p.si.length !== 8 || p.si.some(x => !Number.isFinite(x))) E("properties." + p.key + ": vettore si non valido");
+  });
+
+  const C = m.calibration;
+  if (!C.type) E("calibration.type è obbligatorio");
+  if (C.type && C.type !== "none") {
+    if (!C.formula) W('calibration: manca la formula sotto la chiave "' + C.type + '" (nuova semantica)');
+    if (!C.input.length) W("calibration.input vuoto");
+    if (!C.c.length) E("calibration.c: almeno un coefficiente");
+    C.c.forEach((x, i) => {
+      if (!Number.isFinite(Number(x.value))) E("calibration.c[" + i + "]: value non numerico");
+      if (x.si.length !== 8 || x.si.some(v => !Number.isFinite(v))) E("calibration.c[" + i + "]: vettore si non valido");
+    });
+    const ids = C.c.map(x => x.id);
+    ids.forEach((v, i) => { if (ids.indexOf(v) !== i) E("calibration.c: id duplicato (" + v + ")"); });
+  }
+
+  const M = m.metrology;
+  if (!M.evaluationFormula) E("metrology.evaluationFormula è obbligatorio");
+  if (M.calDate === null || !Number.isInteger(Number(M.calDate))) E("metrology.calDate obbligatorio: intero (epoch, 0 = non calibrato)");
+  if (M.calPeriod === null || !Number.isInteger(Number(M.calPeriod)) || Number(M.calPeriod) < 0) E("metrology.calPeriod obbligatorio: intero ≥ 0 (giorni)");
+  if (M.certificateId === null || M.certificateId === undefined) E("metrology.certificateId è obbligatorio (stringa, anche vuota)");
+  if (!M.readingUncertainty.length) W("metrology.readingUncertainty vuoto");
+  const vn = M.readingUncertainty.map(e => e.varName);
+  M.readingUncertainty.forEach((e, i) => {
+    if (!e.varName) E("readingUncertainty[" + i + "]: varName obbligatorio");
+    else if (vn.indexOf(e.varName) !== i) E("readingUncertainty: varName duplicato «" + e.varName + "»");
+    if (!Number.isFinite(Number(e.value))) E("readingUncertainty[" + e.varName + "]: value non numerico");
+    if (!e.PDF) W("readingUncertainty[" + (e.varName || i) + "]: PDF non specificato");
+  });
+  (m.loadNotes || []).forEach(W);
+  if (M.evaluationFormula && M.evaluationFormula !== "RSS" && !vn.includes(M.evaluationFormula))
+    W('evaluationFormula "' + M.evaluationFormula + '" non corrisponde a nessun varName di readingUncertainty');
+
+  m.extras.forEach(x => { if (x.kind === "json") { try { JSON.parse(x.value); } catch (e) { E("campo personalizzato «" + x.key + "»: JSON non valido"); } } });
+  return msgs;
+}
+
+/* ======================= UI: CONTROLLI ======================= */
+function field(labelText, node, opts) {
+  opts = opts || {};
+  const l = el("label", { class: "f" }, [
+    el("span", { class: opts.req ? "req" : "", text: labelText }),
+    node,
+    opts.hint ? el("div", { class: "hint", text: opts.hint }) : null
+  ]);
+  return l;
+}
+function txtInput(obj, key, opts) {
+  opts = opts || {};
+  const i = el("input", { value: obj[key] ?? "", placeholder: opts.ph || "" });
+  i.addEventListener("input", () => { obj[key] = i.value; if (opts.on) opts.on(); refresh(); });
+  return i;
+}
+function numInput(obj, key, opts) {
+  opts = opts || {};
+  const i = el("input", { value: obj[key] === null || obj[key] === undefined ? "" : String(obj[key]), placeholder: opts.ph || "" });
+  i.addEventListener("input", () => {
+    const n = numOrNull(i.value);
+    if (opts.nullable && i.value.trim() === "") obj[key] = null;
+    else obj[key] = (n === null ? (opts.int ? 0 : NaN) : (opts.int ? Math.trunc(n) : n));
+    i.classList.toggle("bad", i.value.trim() !== "" && n === null);
+    refresh();
+  });
+  return i;
+}
+function listInput(obj, key, ph) {
+  const i = el("input", { value: (obj[key] || []).join(", "), placeholder: ph || "" });
+  i.addEventListener("input", () => { obj[key] = i.value.split(",").map(s => s.trim()).filter(Boolean); refresh(); });
+  return i;
+}
+function selectInput(obj, key, options, editable, on) {
+  if (editable) {
+    const id = "dl" + Math.random().toString(36).slice(2);
+    const dl = el("datalist", { id }, options.map(o => el("option", { value: o })));
+    const i = txtInput(obj, key, { on }); i.setAttribute("list", id);
+    return el("div", null, [i, dl]);
+  }
+  const s = el("select", null, options.map(o => el("option", { value: o, text: o, selected: obj[key] === o ? "" : null })));
+  s.value = obj[key];
+  s.addEventListener("change", () => { obj[key] = s.value; refresh(); });
+  return s;
+}
+
+/* Editor D-SI: siExp + si[8] + dsi + preset */
+function siEditor(o) {
+  const preset = el("select", null, [el("option", { value: "", text: "preset unità…" })].concat(UNIT_PRESETS.map(p => el("option", { value: p.dsi, text: p.dsi }))));
+  const wrap = el("div", { class: "grid" });
+  const dsiIn = txtInput(o, "dsi", { ph: "\\degreeCelsius" });
+  const expIn = numInput(o, "siExp", { int: true });
+  const siInputs = [];
+  const siRow = el("div", { class: "si" }, SI_LABELS.map((lab, i) => {
+    const inp = el("input", { value: String(o.si[i] ?? 0), title: SI_TITLES[i] });
+    inp.addEventListener("input", () => { const n = numOrNull(inp.value); o.si[i] = n === null ? NaN : n; inp.classList.toggle("bad", n === null); refresh(); });
+    siInputs.push(inp);
+    return el("label", null, [el("span", { text: lab, title: SI_TITLES[i] }), inp]);
+  }));
+  preset.addEventListener("change", () => {
+    const p = UNIT_PRESETS.find(x => x.dsi === preset.value);
+    if (!p) return;
+    o.dsi = p.dsi; o.siExp = p.siExp; o.si = p.si.slice();
+    dsiIn.value = p.dsi; expIn.value = String(p.siExp);
+    siInputs.forEach((inp, i) => { inp.value = String(p.si[i]); inp.classList.remove("bad"); });
+    preset.value = ""; refresh();
+  });
+  wrap.appendChild(el("div", { class: "grid g3" }, [
+    field("dsi", dsiIn, { req: true }),
+    field("siExp", expIn, { req: true }),
+    field("preset", preset)
+  ]));
+  wrap.appendChild(field("si — esponenti unità di base", siRow, { req: true }));
+  return wrap;
+}
+
+function itemHead(titleNode, actions) {
+  return el("div", { class: "head" }, [titleNode, el("span", { class: "grow", style: "flex:1" })].concat(actions));
+}
+function btn(label, cls, on, title, disabled) {
+  const b = el("button", { class: "mini " + (cls || ""), text: label, title: title || "", onclick: on });
+  if (disabled) b.disabled = true;
+  return b;
+}
+
+/* Editor generico di campi personalizzati / blocchi annidati */
+function extrasEditor(list, onChange, label) {
+  const box = el("div");
+  const draw = () => {
+    box.innerHTML = "";
+    list.forEach((x, i) => {
+      const it = el("div", { class: "item" });
+      const kindSel = el("select", null, [["text","testo"],["number","numero"],["bool","booleano"],["json","blocco JSON"]]
+        .map(([v, t]) => el("option", { value: v, text: t })));
+      kindSel.value = x.kind;
+      kindSel.addEventListener("change", () => {
+        x.kind = kindSel.value;
+        if (x.kind === "bool") x.value = !!x.value;
+        else if (x.kind === "json" && typeof x.value !== "string") x.value = "{}";
+        else if (typeof x.value !== "string") x.value = String(x.value);
+        draw(); refresh();
+      });
+      let valNode;
+      if (x.kind === "json") {
+        valNode = el("textarea", { spellcheck: "false" }); valNode.value = x.value;
+        valNode.addEventListener("input", () => { x.value = valNode.value; refresh(); });
+      } else if (x.kind === "bool") {
+        valNode = el("select", null, [el("option", { value: "true", text: "true" }), el("option", { value: "false", text: "false" })]);
+        valNode.value = String(!!x.value);
+        valNode.addEventListener("change", () => { x.value = valNode.value === "true"; refresh(); });
+      } else {
+        valNode = txtInput(x, "value");
+      }
+      it.appendChild(itemHead(el("span", { class: "name", text: x.key || "(senza nome)" }), [
+        btn("Duplica", "", () => { list.splice(i + 1, 0, clone(x)); draw(); refresh(); }),
+        btn("Elimina", "danger", () => { list.splice(i, 1); draw(); refresh(); })
+      ]));
+      it.appendChild(el("div", { class: "grid g2" }, [
+        field("chiave", txtInput(x, "key", { on: draw })), field("tipo", kindSel)
+      ]));
+      it.appendChild(field("valore", valNode));
+      box.appendChild(it);
+    });
+    box.appendChild(el("div", { class: "rowbtn" }, [
+      btn("+ campo semplice", "", () => { list.push({ key: "nuovoCampo", kind: "text", value: "" }); draw(); refresh(); }),
+      btn("+ blocco JSON annidato", "", () => { list.push({ key: "nuovoBlocco", kind: "json", value: '{\n  "chiave": 0\n}' }); draw(); refresh(); })
+    ]));
+    if (onChange) onChange();
+  };
+  draw();
+  return box;
+}
+
+/* ======================= UI: SEZIONI ======================= */
+let M = defaultModel();
+let fnTouched = false;
+
+function card(title, bodyNode, collapsed) {
+  const b = el("div", { class: "body" }, [bodyNode]);
+  const h = el("h2", null, [el("span", { class: "caret", text: "▾" }), document.createTextNode(title)]);
+  const s = el("section", { class: "card" + (collapsed ? " collapsed" : "") }, [h, b]);
+  h.addEventListener("click", () => {
+    s.classList.toggle("collapsed");
+    h.querySelector(".caret").textContent = s.classList.contains("collapsed") ? "▸" : "▾";
+  });
+  if (collapsed) h.querySelector(".caret").textContent = "▸";
+  return s;
+}
+
+function secIdent() {
+  const g = el("div", { class: "grid g2" }, [
+    field("schemaVersion", txtInput(M, "schemaVersion"), { req: true, hint: "attuale: " + CURRENT_SCHEMA }),
+    field("modelName", txtInput(M, "modelName", { ph: "TemperatureSensorNTC", on: syncName }), { req: true, hint: "chiave di lookup lato backend (TemplateService, case-insensitive)" }),
+    field("mpn", txtInput(M, "mpn", { ph: "NTCLP450E3", on: syncName }), { req: true }),
+    field("manufacturer", txtInput(M, "manufacturer", { ph: "Vishay" }), { req: true }),
+    field("datasheet", txtInput(M, "datasheet", { ph: "https://…" }), { req: true }),
+    field("templateId", numInput(M, "templateId", { int: true }), { req: true, hint: "intero univoco (usati: 201-204, 301)" })
+  ]);
+  return card("1 · Identificazione (campi fissi)", g);
+}
+
+function secQuantity() {
+  const g = el("div", null, [
+    el("div", { class: "grid g2" }, [
+      field("type", selectInput(M, "type", TYPE_NAMES, true, syncName), { req: true, hint: "tipo di sensore (es. accelerometer)" }),
+      field("quantity", selectInput(M, "quantity", QUANTITY_NAMES, true, syncName), { req: true, hint: "grandezza misurata (es. acceleration)" })
+    ]),
+    el("div", { class: "grid g2", style: "margin-top:10px" }, [
+      field("unit", selectInput(M, "unit", UNIT_PRESETS.map(p => p.dsi), true), { req: true, hint: "unità dei valori restituiti" }),
+      field("elecUnit", selectInput(M, "elecUnit", UNIT_PRESETS.map(p => p.dsi), true), { req: true, hint: "unità della lettura elettrica grezza" })
+    ])
+  ]);
+  return card("2 · Sensore, grandezza e unità (campi fissi)", g);
+}
+
+function secRanges() {
+  const box = el("div");
+  const draw = () => {
+    box.innerHTML = "";
+    M.ranges.forEach((r, i) => {
+      const required = REQ_RANGES.includes(r.name);
+      const it = el("div", { class: "item" + (required ? " locked" : "") });
+      const nameIn = el("input", { class: "name", value: r.name });
+      nameIn.disabled = required;
+      nameIn.addEventListener("input", () => { r.name = nameIn.value; refresh(); });
+      it.appendChild(itemHead(nameIn, [
+        el("span", { class: "tag" + (required ? " req" : ""), text: required ? "obbligatorio" : "opzionale" }),
+        btn("Duplica", "", () => { const c = clone(r); c.name = r.name + "Copy"; M.ranges.splice(i + 1, 0, c); draw(); refresh(); }),
+        btn("Elimina", "danger", () => { M.ranges.splice(i, 1); draw(); refresh(); }, required ? "blocco obbligatorio" : "", required)
+      ]));
+      it.appendChild(el("div", { class: "grid g2" }, [
+        field("min", numInput(r, "min"), { req: true }),
+        field("max", numInput(r, "max"), { req: true, hint: r.name === "sampling" ? "0 = nessun limite superiore" : "" })
+      ]));
+      if (!r.minmaxOnly) it.appendChild(siEditor(r));
+      const tgl = el("label", { style: "font-size:12px;display:flex;gap:6px;align-items:center;margin-top:6px" }, [
+        (() => { const c = el("input", { type: "checkbox", style: "width:auto" }); c.checked = r.minmaxOnly;
+          c.addEventListener("change", () => { r.minmaxOnly = c.checked; draw(); refresh(); }); return c; })(),
+        el("span", { text: "solo min/max (senza unità), come per «threshold»" })
+      ]);
+      it.appendChild(tgl);
+      if (r.extras && r.extras.length) it.appendChild(field("campi extra del blocco", extrasEditor(r.extras)));
+      box.appendChild(it);
+    });
+    box.appendChild(el("div", { class: "rowbtn" }, [
+      btn("+ nuovo range", "", () => { M.ranges.push({ name: "nuovoRange", min: 0, max: 0, ...siBlock("\\one"), minmaxOnly: false, extras: [] }); draw(); refresh(); })
+    ]));
+  };
+  draw();
+  return card("3 · Ranges (blocchi duplicabili)", box);
+}
+
+function secProps() {
+  const box = el("div");
+  M.propExtras = M.propExtras || [];
+  const draw = () => {
+    box.innerHTML = "";
+    M.properties.forEach((p, i) => {
+      const required = REQ_PROPS.includes(p.base || p.key);
+      const it = el("div", { class: "item" + (required ? " locked" : "") });
+      const nameIn = el("input", { class: "name", value: p.key });
+      nameIn.disabled = required;
+      nameIn.addEventListener("input", () => { p.key = nameIn.value; if (!p.baseTouched) p.base = nameIn.value; refresh(); });
+      it.appendChild(itemHead(nameIn, [
+        el("span", { class: "tag" + (required ? " req" : ""), text: required ? "obbligatoria" : "opzionale" }),
+        btn("Duplica", "", () => { const c = clone(p); c.key = p.key + "Copy"; c.base = (p.base || p.key) + "Copy"; M.properties.splice(i + 1, 0, c); draw(); refresh(); }),
+        btn("Elimina", "danger", () => { M.properties.splice(i, 1); draw(); refresh(); }, required ? "property obbligatoria" : "", required)
+      ]));
+      const baseIn = el("input", { value: p.base || p.key });
+      baseIn.addEventListener("input", () => { p.base = baseIn.value; p.baseTouched = true; refresh(); });
+      it.appendChild(el("div", { class: "grid g2" }, [
+        field("valore", numInput(p, "value"), { req: true }),
+        field("prefisso chiavi Si/SiExp/Dsi", baseIn, { hint: "di norma uguale al nome (es. fluke usa heatingTimeMax + heatingTimeSiExp)" })
+      ]));
+      it.appendChild(siEditor(p));
+      box.appendChild(it);
+    });
+    box.appendChild(el("div", { class: "rowbtn" }, [
+      btn("+ nuova property", "", () => { M.properties.push({ key: "nuovaProperty", base: "nuovaProperty", value: 0, ...siBlock("\\one") }); draw(); refresh(); })
+    ]));
+    box.appendChild(el("div", { style: "margin-top:10px" }, [el("div", { class: "hint", text: "Campi liberi dentro properties (non seguono lo schema valore/Si/SiExp/Dsi):" }), extrasEditor(M.propExtras)]));
+  };
+  draw();
+  return card("4 · Properties (gruppi duplicabili)", box);
+}
+
+function secCalib() {
+  const C = M.calibration;
+  const box = el("div");
+  const draw = () => {
+    box.innerHTML = "";
+    box.appendChild(el("div", { class: "grid g2" }, [
+      field("type", selectInput(C, "type", ["linear", "polynomial", "second-order", "steinhart_201", "none"], true), { req: true, hint: "la formula viene emessa sotto una chiave con questo stesso nome" }),
+      field("input", listInput(C, "input", "x, y"), { hint: "variabili della formula, separate da virgola" })
+    ]));
+    box.appendChild(field("formula (\"" + (C.type || "?") + "\")", (() => {
+      const t = el("textarea", { spellcheck: "false", placeholder: "c[0] + c[1] * x" }); t.value = C.formula || "";
+      t.addEventListener("input", () => { C.formula = t.value; refresh(); });
+      return t;
+    })(), { hint: "nuova semantica: coefficienti richiamati come c[i]" }));
+
+    const cbox = el("div");
+    C.c.forEach((x, i) => {
+      const it = el("div", { class: "item" });
+      it.appendChild(itemHead(el("span", { class: "name", text: "c[" + x.id + "]" }), [
+        btn("Duplica", "", () => { const n = clone(x); n.id = Math.max(...C.c.map(y => y.id)) + 1; C.c.splice(i + 1, 0, n); draw(); refresh(); }),
+        btn("Elimina", "danger", () => { C.c.splice(i, 1); draw(); refresh(); })
+      ]));
+      it.appendChild(el("div", { class: "grid g2" }, [
+        field("id", numInput(x, "id", { int: true }), { req: true }),
+        field("value", numInput(x, "value"), { req: true, hint: "accetta notazione scientifica (3.19414e-3)" })
+      ]));
+      it.appendChild(siEditor(x));
+      cbox.appendChild(it);
+    });
+    cbox.appendChild(el("div", { class: "rowbtn" }, [
+      btn("+ coefficiente", "", () => { C.c.push({ id: C.c.length ? Math.max(...C.c.map(y => y.id)) + 1 : 0, value: 0, ...siBlock("\\one") }); draw(); refresh(); })
+    ]));
+    box.appendChild(field("coefficienti c[] (duplicabili)", cbox, { req: true }));
+
+    box.appendChild(el("div", { style: "margin-top:10px" }, [el("div", { class: "hint", text: "Campi personalizzati dentro calibration:" }), extrasEditor(C.extras)]));
+
+    if (C.legacy) {
+      box.appendChild(el("div", { class: "legacybox" }, [
+        el("div", { html: "<b>Old semantic rilevata</b> — <code>" + Object.keys(C.legacy).join("</code>, <code>") + "</code>. Non è più modificabile né generabile ex novo: viene ricopiata identica nel file di output." }),
+        el("pre", { text: pretty(C.legacy, 0) }),
+        el("div", { class: "rowbtn" }, [btn("Rimuovi definitivamente dal file", "danger", () => {
+          if (confirm("Rimuovere i blocchi old semantic dall'output? L'operazione non è reversibile in questa sessione.")) { C.legacy = null; rebuild(); }
+        })])
+      ]));
+    }
+  };
+  draw();
+  return card("5 · Calibrazione (nuova semantica)", box);
+}
+
+function uncList(arr, title, onDraw) {
+  const box = el("div");
+  const draw = () => {
+    box.innerHTML = "";
+    arr.forEach((e, i) => {
+      const it = el("div", { class: "item" });
+      it.appendChild(itemHead(el("span", { class: "name", text: e.varName || "(senza nome)" }), [
+        btn("Duplica", "", () => { arr.splice(i + 1, 0, clone(e)); draw(); refresh(); }),
+        btn("Elimina", "danger", () => { arr.splice(i, 1); draw(); refresh(); })
+      ]));
+      it.appendChild(el("div", { class: "grid g4" }, [
+        field("varName", txtInput(e, "varName", { on: draw }), { req: true }),
+        field("value", numInput(e, "value"), { req: true }),
+        field("PDF", selectInput(e, "PDF", PDF_OPTIONS, true), { req: true }),
+        (() => {
+          const wrap = el("div");
+          const sel = el("select", null, [el("option", { value: "coverageFactor", text: "coverageFactor" }), el("option", { value: "k", text: "k" })]);
+          sel.value = e.cfKey || "coverageFactor";
+          sel.addEventListener("change", () => { e.cfKey = sel.value; refresh(); });
+          wrap.appendChild(sel);
+          wrap.appendChild(numInput(e, "cf", { nullable: true, ph: "vuoto = assente" }));
+          return field("fattore di copertura", wrap);
+        })()
+      ]));
+      it.appendChild(field("description", txtInput(e, "description")));
+      if (e.extras && e.extras.length) it.appendChild(field("campi extra", extrasEditor(e.extras)));
+      box.appendChild(it);
+    });
+    box.appendChild(el("div", { class: "rowbtn" }, [
+      btn("+ voce", "", () => { arr.push({ varName: "nuovaVar", value: 0, PDF: "uniform", cfKey: "coverageFactor", cf: null, description: "", extras: [] }); draw(); refresh(); })
+    ]));
+    if (onDraw) onDraw();
+  };
+  draw();
+  return field(title, box);
+}
+
+function secMetro() {
+  const Mt = M.metrology;
+  const box = el("div");
+  const draw = () => {
+    box.innerHTML = "";
+    box.appendChild(el("div", { class: "grid g2" }, [
+      field("evaluationFormula", txtInput(Mt, "evaluationFormula", { ph: "uB / RSS" }), { req: true, hint: "varName da usare come incertezza tipo, oppure RSS" }),
+      field("requiredInputs", listInput(Mt, "requiredInputs", "setpoint_temperature"), { hint: "lista estendibile, separata da virgola" })
+    ]));
+    box.appendChild(uncList(Mt.readingUncertainty, "readingUncertainty (voci duplicabili)"));
+    if (!(Mt.legacy && Mt.legacy.Uncertainty !== undefined))
+      box.appendChild(uncList(Mt.Uncertainty, "Uncertainty (voci duplicabili, opzionale)"));
+    box.appendChild(el("div", { class: "grid g3" }, [
+      field("calDate", numInput(Mt, "calDate", { int: true, nullable: true }), { req: true, hint: "epoch, 0 = non calibrato" }),
+      field("calPeriod", numInput(Mt, "calPeriod", { int: true, nullable: true }), { req: true, hint: "giorni" }),
+      field("certificateId", txtInput(Mt, "certificateId"), { req: true })
+    ]));
+    box.appendChild(el("div", { style: "margin-top:10px" }, [el("div", { class: "hint", text: "Campi personalizzati dentro metrology:" }), extrasEditor(Mt.extras)]));
+    if (Mt.legacy) {
+      box.appendChild(el("div", { class: "legacybox" }, [
+        el("div", { html: "<b>Old semantic rilevata</b> — <code>" + Object.keys(Mt.legacy).join("</code>, <code>") + "</code>. Ricopiata identica nel file di output." }),
+        el("pre", { text: pretty(Mt.legacy, 0) }),
+        el("div", { class: "rowbtn" }, [btn("Rimuovi definitivamente dal file", "danger", () => {
+          if (confirm("Rimuovere i blocchi old semantic dall'output?")) { Mt.legacy = null; rebuild(); }
+        })])
+      ]));
+    }
+  };
+  draw();
+  return card("6 · Metrologia", box);
+}
+
+function secComments() {
+  const box = el("div");
+  const draw = () => {
+    box.innerHTML = "";
+    const all = [
+      { scope: "root", list: M.comments.filter(c => (c.scope || "root") === "root"), label: "radice" },
+      { scope: "ranges", list: M.comments.filter(c => c.scope === "ranges"), label: "ranges" },
+      { scope: "properties", list: M.comments.filter(c => c.scope === "properties"), label: "properties" },
+      { scope: "calibration", list: M.calibration.comments, label: "calibration" },
+      { scope: "metrology", list: M.metrology.comments, label: "metrology" }
+    ];
+    all.forEach(grp => grp.list.forEach(c => {
+      const it = el("div", { class: "item" });
+      it.appendChild(itemHead(el("span", { class: "name", text: c.key }), [
+        el("span", { class: "tag", text: grp.label }),
+        btn("Elimina", "danger", () => {
+          if (grp.scope === "calibration") M.calibration.comments.splice(M.calibration.comments.indexOf(c), 1);
+          else if (grp.scope === "metrology") M.metrology.comments.splice(M.metrology.comments.indexOf(c), 1);
+          else M.comments.splice(M.comments.indexOf(c), 1);
+          draw(); refresh();
+        })
+      ]));
+      it.appendChild(el("div", { class: "grid g2" }, [
+        field("chiave", txtInput(c, "key", { on: draw }), { hint: "deve iniziare con usercomment" }),
+        field("precede la chiave", txtInput(c, "anchor", { ph: "(fine oggetto)" }))
+      ]));
+      it.appendChild(field("testo", txtInput(c, "text")));
+      box.appendChild(it);
+    }));
+    const scopeSel = el("select", { style: "width:auto" }, all.map(g => el("option", { value: g.scope, text: g.label })));
+    box.appendChild(el("div", { class: "rowbtn" }, [scopeSel, btn("+ commento", "", () => {
+      const n = { key: "usercomment_" + Math.floor(Math.random() * 900 + 100), text: "", anchor: "" };
+      if (scopeSel.value === "calibration") M.calibration.comments.push(n);
+      else if (scopeSel.value === "metrology") M.metrology.comments.push(n);
+      else { n.scope = scopeSel.value; M.comments.push(n); }
+      draw(); refresh();
+    })]));
+  };
+  draw();
+  return card("7 · Commenti inline (usercomment_*)", box, true);
+}
+
+function secExtras() {
+  return card("8 · Campi personalizzati alla radice (opzionali)",
+    el("div", null, [
+      el("div", { class: "hint", text: "Campi singoli o blocchi annidati non previsti dallo schema. Vengono emessi in coda al file e riletti senza perdite." }),
+      extrasEditor(M.extras)
+    ]), true);
+}
+
+/* ======================= RENDER / REFRESH ======================= */
+function rebuild() {
+  const f = $("#form");
+  f.innerHTML = "";
+  [secIdent(), secQuantity(), secRanges(), secProps(), secCalib(), secMetro(), secComments(), secExtras()].forEach(s => f.appendChild(s));
+  refresh();
+}
+
+function syncName() {
+  if (fnTouched) return;
+  const base = ((M.quantity || M.type || "sensor") + "_" + (M.mpn || M.modelName || "template")).toLowerCase().replace(/[^a-z0-9]+/g, "_").replace(/^_+|_+$/g, "");
+  $("#fname").value = base + ".json";
+}
+
+function refresh() {
+  const obj = serialize(M);
+  $("#out").textContent = pretty(obj, 0);
+  const msgs = validate(M);
+  const errs = msgs.filter(m => m.l === "err").length, warns = msgs.length - errs;
+  const box = $("#msgs"); box.innerHTML = "";
+  if (!msgs.length) box.appendChild(el("div", { class: "msg ok", text: "✓ nessun problema: tutti i campi obbligatori sono valorizzati" }));
+  msgs.forEach(m => box.appendChild(el("div", { class: "msg " + m.l, text: (m.l === "err" ? "✕ " : "! ") + m.t })));
+  const c = $("#vcount");
+  c.textContent = errs + " err · " + warns + " avv";
+  c.className = "tag" + (errs ? " req" : "");
+  const b = $("#banner");
+  if (M.legacyFlags.length) {
+    b.className = "banner on";
+    b.innerHTML = "<b>Attenzione — questo template usa la «old semantic»</b>" +
+      "<ul>" + M.legacyFlags.map(f => "<li>" + f + "</li>").join("") + "</ul>" +
+      "<div style='margin-top:6px'>I blocchi legacy <u>non sono editabili</u> e vengono <b>ricopiati identici</b> nel file di output. " +
+      "I nuovi template non devono più contenerli: usare <code>calibration.c[]</code> + formula, e <code>Uncertainty</code> in forma <code>varName/value/PDF</code>.</div>";
+  } else { b.className = "banner"; b.innerHTML = ""; }
+}
+
+/* ======================= I/O ======================= */
+function loadJsonText(text, name) {
+  let res;
+  try { res = tolerantParse(text); }
+  catch (e) { alert("JSON non valido: " + e.message); return; }
+  M = parseTemplate(res.obj);
+  if (res.fixed) M.loadNotes.push("il file di origine conteneva virgole finali: JSON non valido (rifiutato anche da Jackson lato sensor-manager), corretto in lettura");
+  fnTouched = true;
+  $("#fname").value = name || ((M.modelName || "template") + ".json");
+  rebuild();
+}
+$("#btnOpen").addEventListener("click", () => $("#file").click());
+$("#file").addEventListener("change", e => {
+  const f = e.target.files[0]; if (!f) return;
+  const r = new FileReader(); r.onload = () => loadJsonText(r.result, f.name); r.readAsText(f);
+  e.target.value = "";
+});
+$("#quickstart").addEventListener("change", e => {
+  if (!e.target.value) return;
+  if (!confirm("Sostituire il contenuto corrente con un nuovo template?")) { e.target.value = ""; return; }
+  M = quickstart(e.target.value); fnTouched = false; syncName(); rebuild();
+  e.target.value = "";
+});
+$("#fname").addEventListener("input", () => { fnTouched = true; });
+$("#btnSave").addEventListener("click", () => {
+  const errs = validate(M).filter(m => m.l === "err");
+  if (errs.length && !confirm(errs.length + " errore/i sui campi obbligatori. Scaricare comunque?")) return;
+  const blob = new Blob([pretty(serialize(M), 0) + "\n"], { type: "application/json" });
+  const a = el("a", { href: URL.createObjectURL(blob), download: $("#fname").value || "template.json" });
+  document.body.appendChild(a); a.click(); a.remove();
+});
+$("#btnCopy").addEventListener("click", async () => {
+  try { await navigator.clipboard.writeText(pretty(serialize(M), 0) + "\n"); $("#btnCopy").textContent = "Copiato ✓"; setTimeout(() => $("#btnCopy").textContent = "Copia", 1200); }
+  catch (e) { alert("Copia non riuscita: seleziona il testo nell'anteprima."); }
+});
+document.querySelectorAll("[data-toggle]").forEach(h => h.addEventListener("click", () => {
+  const s = h.parentElement; s.classList.toggle("collapsed");
+  const c = h.querySelector(".caret"); if (c) c.textContent = s.classList.contains("collapsed") ? "▸" : "▾";
+}));
+["dragenter", "dragover"].forEach(ev => document.addEventListener(ev, e => { e.preventDefault(); $("#drop").classList.add("on"); }));
+["dragleave", "drop"].forEach(ev => document.addEventListener(ev, e => { e.preventDefault(); if (ev === "drop" || e.target === $("#drop")) $("#drop").classList.remove("on"); }));
+document.addEventListener("drop", e => {
+  const fs = [...e.dataTransfer.files];
+  if (!fs.length) return;
+  /* un file solo: si apre nell'editor. Piu' file: si passa in validazione. */
+  if (fs.length > 1) { validateFiles(fs); return; }
+  const r = new FileReader(); r.onload = () => loadJsonText(r.result, fs[0].name); r.readAsText(fs[0]);
+});
+
+/* ======================= MODALITA' VALIDAZIONE ======================= */
+/* Controlla uno o più template già esistenti senza aprirli nell'editor:
+   struttura, campi obbligatori, old semantic e coerenza fra i file. */
+
+function fileReport(name, text) {
+  const row = { name, text, errs: [], warns: [], flags: [], model: null };
+  let res;
+  try { res = tolerantParse(text); }
+  catch (e) { row.flags.push("JSON non valido"); row.errs.push("parsing fallito: " + e.message); return row; }
+  if (res.fixed) {
+    row.flags.push("virgole finali");
+    row.errs.push("JSON non valido: virgole finali. Jackson lo rifiuta e TemplateService.loadTemplates itera senza try/catch, quindi fallisce il caricamento dell'intera cartella");
+  }
+  if (!isObj(res.obj)) { row.errs.push("la radice del file non è un oggetto JSON"); return row; }
+
+  const m = parseTemplate(res.obj);
+  row.model = m;
+  const v = validate(m);
+  v.forEach(x => (x.l === "err" ? row.errs : row.warns).push(x.t));
+  if (m.legacyFlags.length) {
+    row.flags.push("old semantic");
+    m.legacyFlags.forEach(f => row.warns.push("old semantic: " + f.replace(/&lt;/g, "<")));
+  }
+  const base = name.replace(/\.[^.]+$/, "").replace(/^.*\//, "").toLowerCase();
+  row.nameMismatch = !!(m.modelName && base !== m.modelName.toLowerCase());
+  return row;
+}
+
+function crossChecks(rows) {
+  const cross = [], byName = {}, byId = {};
+  const mism = rows.filter(r => r.nameMismatch).map(r => r.name);
+  if (mism.length) cross.push({ l: "warn", t: "nome file diverso da modelName in " + mism.length + " file (" + mism.join(", ") +
+    "): il caricamento indicizza per modelName mentre TemplateService.removeTemplate usa il nome del file, quindi cancellando un template non viene rimosso dalla mappa in memoria" });
+  rows.forEach(r => {
+    if (!r.model) return;
+    const n = (r.model.modelName || "").toLowerCase();
+    if (n) (byName[n] = byName[n] || []).push(r);
+    const id = r.model.templateId;
+    if (id !== "" && id !== null && id !== undefined) (byId[id] = byId[id] || []).push(r);
+  });
+  Object.keys(byName).forEach(n => {
+    if (byName[n].length < 2) return;
+    const f = byName[n].map(r => r.name).join(", ");
+    cross.push({ l: "err", t: "modelName duplicato «" + n + "» in " + f + ": TemplateService li indicizza sulla stessa chiave, l'ultimo caricato sovrascrive gli altri" });
+    byName[n].forEach(r => r.errs.push("modelName duplicato con: " + byName[n].filter(x => x !== r).map(x => x.name).join(", ")));
+  });
+  Object.keys(byId).forEach(id => {
+    if (byId[id].length < 2) return;
+    const f = byId[id].map(r => r.name).join(", ");
+    cross.push({ l: "err", t: "templateId " + id + " duplicato in " + f });
+    byId[id].forEach(r => r.errs.push("templateId " + id + " duplicato con: " + byId[id].filter(x => x !== r).map(x => x.name).join(", ")));
+  });
+  return cross;
+}
+
+function renderReport(rows, cross) {
+  const body = $("#repBody");
+  body.innerHTML = "";
+  const ok = rows.filter(r => !r.errs.length).length;
+  const leg = rows.filter(r => r.flags.includes("old semantic")).length;
+  body.appendChild(el("div", { class: "sum" }, [
+    el("span", { class: "pill", text: rows.length + " file analizzati" }),
+    el("span", { class: "pill ok", text: ok + " senza errori" }),
+    el("span", { class: "pill" + (rows.length - ok ? " err" : ""), text: (rows.length - ok) + " con errori" }),
+    el("span", { class: "pill" + (leg ? " leg" : ""), text: leg + " in old semantic" })
+  ]));
+  if (cross.length) {
+    const anyErr = cross.some(c => c.l === "err");
+    const b = el("div", { class: "rep" + (anyErr ? " bad" : "") }, [el("div", { class: "h" }, [el("span", { class: "fn", text: "coerenza fra file" })])]);
+    const mb = el("div", { class: "msgs" });
+    cross.forEach(c => mb.appendChild(el("div", { class: "msg " + c.l, text: (c.l === "err" ? "✕ " : "! ") + c.t })));
+    b.appendChild(mb); body.appendChild(b);
+  }
+  rows.forEach(r => {
+    const bad = r.errs.length > 0;
+    const box = el("div", { class: "rep" + (bad ? " bad" : "") });
+    const head = el("div", { class: "h" }, [
+      el("span", { class: "fn", text: r.name }),
+      el("span", { class: "tag" + (bad ? " req" : ""), text: bad ? r.errs.length + " err" : "ok" }),
+      r.warns.length ? el("span", { class: "tag", text: r.warns.length + " avv" }) : null
+    ].concat(r.flags.map(f => el("span", { class: "tag req", text: f }))));
+    head.appendChild(el("span", { style: "flex:1" }));
+    if (r.model) head.appendChild(btn("Apri nell'editor", "", () => {
+      $("#overlay").classList.remove("on");
+      loadJsonText(r.text, r.name);
+    }));
+    box.appendChild(head);
+    const mb = el("div", { class: "msgs" });
+    if (!r.errs.length && !r.warns.length) mb.appendChild(el("div", { class: "msg ok", text: "✓ struttura conforme allo schema " + CURRENT_SCHEMA }));
+    r.errs.forEach(t => mb.appendChild(el("div", { class: "msg err", text: "✕ " + t })));
+    r.warns.forEach(t => mb.appendChild(el("div", { class: "msg warn", text: "! " + t })));
+    box.appendChild(mb);
+    body.appendChild(box);
+  });
+  $("#overlay").classList.add("on");
+}
+
+const NL = String.fromCharCode(10);
+let lastReport = "";
+async function validateFiles(fileList) {
+  const files = [...fileList].filter(f => /\.json$/i.test(f.name));
+  if (!files.length) { alert("Nessun file .json selezionato."); return; }
+  const rows = [];
+  for (const f of files) {
+    const text = await f.text();
+    rows.push(fileReport(f.webkitRelativePath || f.name, text));
+  }
+  rows.sort((a, b) => (b.errs.length - a.errs.length) || a.name.localeCompare(b.name));
+  const cross = crossChecks(rows);
+  lastReport = ["Report validazione template — " + new Date().toLocaleString(),
+    rows.length + " file, " + rows.filter(r => !r.errs.length).length + " senza errori"]
+    .concat(cross.map(c => "[coerenza] " + (c.l === "err" ? "ERRORE  " : "avviso  ") + c.t))
+    .concat(rows.map(r => ["", "== " + r.name + (r.flags.length ? "  [" + r.flags.join(", ") + "]" : "")]
+      .concat(r.errs.map(t => "  ERRORE  " + t)).concat(r.warns.map(t => "  avviso  " + t)).join(NL))).join(NL);
+  renderReport(rows, cross);
+}
+
+$("#btnVal").addEventListener("click", () => $("#fileVal").click());
+$("#btnValDir").addEventListener("click", () => $("#dirVal").click());
+["#fileVal", "#dirVal"].forEach(sel => $(sel).addEventListener("change", e => {
+  if (e.target.files.length) validateFiles(e.target.files);
+  e.target.value = "";
+}));
+$("#repClose").addEventListener("click", () => $("#overlay").classList.remove("on"));
+$("#overlay").addEventListener("click", e => { if (e.target.id === "overlay") $("#overlay").classList.remove("on"); });
+document.addEventListener("keydown", e => { if (e.key === "Escape") $("#overlay").classList.remove("on"); });
+$("#repCopy").addEventListener("click", async () => {
+  try { await navigator.clipboard.writeText(lastReport); $("#repCopy").textContent = "Copiato ✓"; setTimeout(() => $("#repCopy").textContent = "Copia report", 1200); }
+  catch (e) { alert("Copia non riuscita."); }
+});
+
+M = quickstart("generic");
+syncName();
+rebuild();
+</script>
+</body>
+</html>
