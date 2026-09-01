@@ -1,0 +1,143 @@
+{
+  "usercomment_tv": "templateVersion e' la versione del Template a cui il dispositivo aderisce. Sul filo (comando UART 0x31, notifica 0x11, poll 0x0B) viaggia su 1 byte: si trasmette il numero MAJOR. Un cambio di MAJOR significa ordine canonico incompatibile; MINOR e PATCH sono aggiunte in coda, retrocompatibili.",
+  "templateVersion": "2.0.0",
+
+  "modelName": "GyroscopeLSM6DSM",
+
+  "mpn": "LSM6DSMTR",
+  "manufacturer": "STMicroelectronics",
+  "datasheet": "https://www.st.com/resource/en/datasheet/lsm6dsm.pdf",
+  "templateId": 205,
+
+  "usercomment_0": "Sezione giroscopica dell'IMU LSM6DSM, configurata a fondo scala +/-2000 dps. E' lo stesso componente fisico del template AccelerometerLSM6DSM (stesso mpn): sono due template distinti perche' misurano due grandezze diverse, con range, sensibilita' e rumore propri. Ciascuno viene istanziato tre volte, una per asse.",
+  "type": "gyroscope",
+  "quantity": "angular_velocity",
+
+  "usercomment_1": "La misura e' una velocita' angolare in gradi al secondo. L'angolo piano e' adimensionale nel SI, quindi il vettore si porta il solo esponente -1 sui secondi; il grado resta espresso in dsi.",
+  "unit": "\\degree\\per\\second",
+
+  "usercomment_2": "elecUnit and elec array are relative to the reading values of the sensor, to be used along with the readingUncertainty parameters",
+  "elecUnit": "\\one",
+
+  "usercomment_3": "supportedMetrics: metriche che questo modello puo' produrre. 'id' e' la posizione nell'ordine canonico del protocollo v1.0 e determina l'ordine sul filo; 'class' e' la cadenza di trasmissione (BASE, EXTENDED, RARE); 'bytes' la dimensione del campo nel report FPort 0x30. Le grandezze sono quelle della misura gia' tarata. L'integrale di una velocita' angolare e' un angolo, quindi la sua unita' e' il grado; lo ZCR e' il tasso di attraversamenti dello zero, indicatore di frequenza dell'oscillazione.",
+  "supportedMetrics": [
+    { "id": 1,  "name": "mean",     "class": "BASE",     "bytes": 2, "siExp": 0, "si": [0, 0, -1, 0, 0, 0, 0, 0], "dsi": "\\degree\\per\\second" },
+    { "id": 2,  "name": "variance", "class": "BASE",     "bytes": 2, "siExp": 0, "si": [0, 0, -2, 0, 0, 0, 0, 0], "dsi": "\\degree\\tothe{2}\\per\\second\\tothe{2}" },
+    { "id": 3,  "name": "max",      "class": "EXTENDED", "bytes": 2, "siExp": 0, "si": [0, 0, -1, 0, 0, 0, 0, 0], "dsi": "\\degree\\per\\second" },
+    { "id": 4,  "name": "min",      "class": "EXTENDED", "bytes": 2, "siExp": 0, "si": [0, 0, -1, 0, 0, 0, 0, 0], "dsi": "\\degree\\per\\second" },
+    { "id": 5,  "name": "integral", "class": "EXTENDED", "bytes": 4, "siExp": 0, "si": [0, 0, 0, 0, 0, 0, 0, 0], "dsi": "\\degree" },
+    { "id": 11, "name": "zcr",      "class": "RARE",     "bytes": 2, "siExp": 0, "si": [0, 0, -1, 0, 0, 0, 0, 0], "dsi": "\\hertz" }
+  ],
+
+  "ranges": {
+
+    "phys": {
+      "min": -2000.0,
+      "max": 2000.0,
+      "siExp": 0,
+      "si": [0, 0, -1, 0, 0, 0, 0, 0],
+      "dsi": "\\degree\\per\\second"
+    },
+
+    "physROC": {
+      "min": -200000.0,
+      "max": 200000.0,
+      "siExp": 0,
+      "si": [0, 0, -2, 0, 0, 0, 0, 0],
+      "dsi": "\\degree\\per\\second\\squared"
+    },
+
+    "elec": {
+      "min": -32768.0,
+      "max": 32767.0,
+      "siExp": 0,
+      "si": [0, 0, 0, 0, 0, 0, 0, 0],
+      "dsi": "\\one"
+    },
+
+    "usercomment_4": "ODR del giroscopio da 12.5 Hz a 6664 Hz (Table 3): periodo minimo 1/6664 s, massimo 1/12.5 s. Il limite inferiore di ODR e' piu' alto di quello dell'accelerometro, che scende a 1.6 Hz.",
+    "sampling": {
+      "min": 0.00015,
+      "max": 0.08,
+      "siExp": 0,
+      "si": [0, 0, 1, 0, 0, 0, 0, 0],
+      "dsi": "\\second"
+    },
+
+    "threshold": {
+      "min": -2000.0,
+      "max": 2000.0,
+      "siExp": 0,
+      "si": [0, 0, -1, 0, 0, 0, 0, 0],
+      "dsi": "\\degree\\per\\second"
+    }
+
+  },
+  "properties": {
+
+    "usercomment_5": "responseTime = Ton, turn-on time dichiarato a 35 ms (Table 3).",
+    "responseTime": 0.035,
+    "responseTimeSiExp": 0,
+    "responseTimeSi": [0, 0, 1, 0, 0, 0, 0, 0],
+    "responseTimeDsi": "\\second",
+
+    "usercomment_6": "readingConsumption stimata come corrente del solo giroscopio per il turn-on time: (IddHP 0.65 mA complessivi - LA_IddHP 0.15 mA dell'accelerometro) x 35 ms = 17.5 uC. Le due correnti sono dichiarate a ODR diversi, quindi il valore e' un ordine di grandezza, non un dato di targa.",
+    "readingConsumption": 17.5,
+    "readingConsumptionSiExp": -6,
+    "readingConsumptionSi": [0, 0, 1, 1, 0, 0, 0, 0],
+    "readingConsumptionDsi": "\\coulomb",
+
+    "usercomment_7": "Densita' di rumore in modalita' high-performance (Rn, Table 3).",
+    "rateNoiseDensity": 3.8,
+    "rateNoiseDensitySiExp": -3,
+    "rateNoiseDensitySi": [0, 0, -0.5, 0, 0, 0, 0, 0],
+    "rateNoiseDensityDsi": "\\degree\\per\\second\\per\\hertz\\tothe{0.5}"
+  },
+  "calibration": {
+
+    "type": "linear",
+
+    "usercomment_8": "Sensibilita' di targa a fondo scala +/-2000 dps: 70 mdps/LSB (G_So, Table 3). c[0] e' lo zero-rate level, da determinare in taratura: il valore di targa e' +/-2 dps.",
+    "linear": "c[0] + c[1] * x",
+    "input": ["x"],
+    "c": [
+      {
+        "id": 0,
+        "value": 0.0,
+        "siExp": 0,
+        "si": [0, 0, -1, 0, 0, 0, 0, 0],
+        "dsi": "\\degree\\per\\second"
+      },
+      {
+        "id": 1,
+        "value": 0.07,
+        "siExp": 0,
+        "si": [0, 0, -1, 0, 0, 0, 0, 0],
+        "dsi": "\\degree\\per\\second"
+      }
+    ]
+  },
+  "metrology": {
+
+    "usercomment_9": "Contributi espressi in LSB, coerentemente con elecUnit ed elec. Conversione con la sensibilita' di targa 0.07 dps/LSB.",
+    "evaluationFormula": "RSS",
+
+    "requiredInputs": [],
+
+    "readingUncertainty": [
+      { "varName": "resolution", "value": 1.0, "PDF": "uniform", "description": "1 LSB = 0.07 dps" },
+      { "varName": "zeroRateLevel", "value": 28.6, "PDF": "uniform", "description": "G_TyOff +/-2 dps di targa, non compensato" },
+      { "varName": "rmsNoise", "value": 1.07, "PDF": "normal", "coverageFactor": 1.0, "description": "RnRMS 75 mdps in normal/low-power mode" }
+    ],
+
+    "Uncertainty": [
+      { "varName": "sensitivityTolerance", "value": 1.0, "PDF": "uniform", "description": "G_So% +/-1% a livello di componente, in percentuale della lettura" },
+      { "varName": "sensitivityDrift", "value": 0.007, "PDF": "uniform", "description": "G_SoDr %/degreeCelsius da -40 a +85" },
+      { "varName": "zeroRateDrift", "value": 0.015, "PDF": "uniform", "description": "G_OffDr dps/degreeCelsius" }
+    ],
+
+    "calDate": 0,
+    "calPeriod": 365,
+    "certificateId": ""
+  }
+}

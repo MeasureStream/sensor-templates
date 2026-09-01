@@ -1,6 +1,7 @@
 {
-  "schemaVersion": "2.0.0",
-  
+  "usercomment_tv": "templateVersion e' la versione del Template a cui il dispositivo aderisce. Sul filo (comando UART 0x31, notifica 0x11, poll 0x0B) viaggia su 1 byte: si trasmette il numero MAJOR. Un cambio di MAJOR significa ordine canonico incompatibile; MINOR e PATCH sono aggiunte in coda, retrocompatibili.",
+  "templateVersion": "2.0.0",
+
   "modelName": "TemperatureSensorNTC",
   
   "mpn": "NTCLP450E3",
@@ -16,6 +17,15 @@
 
   "usercomment_1": "elecUnit and elec array are relative to the reading values of the sensor, to be used along with the readingUncertainty parameters",
   "elecUnit": "\\one",
+
+  "usercomment_2": "supportedMetrics: metriche che questo modello puo' produrre. 'id' e' la posizione nell'ordine canonico del protocollo v1.0 e determina l'ordine sul filo; 'class' e' la cadenza di trasmissione (BASE, EXTENDED, RARE); 'bytes' la dimensione del campo nel report FPort 0x30. Le grandezze sono quelle della misura gia' tarata.",
+  "supportedMetrics": [
+    { "id": 1, "name": "mean",     "class": "BASE",     "bytes": 2, "siExp": 0, "si": [0, 0, 0, 0, 1, 0, 0, 0], "dsi": "\\degreeCelsius" },
+    { "id": 2, "name": "variance", "class": "BASE",     "bytes": 2, "siExp": 0, "si": [0, 0, 0, 0, 2, 0, 0, 0], "dsi": "\\degreeCelsius\\tothe{2}" },
+    { "id": 3, "name": "max",      "class": "EXTENDED", "bytes": 2, "siExp": 0, "si": [0, 0, 0, 0, 1, 0, 0, 0], "dsi": "\\degreeCelsius" },
+    { "id": 4, "name": "min",      "class": "EXTENDED", "bytes": 2, "siExp": 0, "si": [0, 0, 0, 0, 1, 0, 0, 0], "dsi": "\\degreeCelsius" },
+    { "id": 5, "name": "integral", "class": "EXTENDED", "bytes": 4, "siExp": 0, "si": [0, 0, 1, 0, 1, 0, 0, 0], "dsi": "\\degreeCelsius\\second" }
+  ],
 
   "ranges": {
 
@@ -53,7 +63,10 @@
 
     "threshold": {
       "min": -40.0,
-      "max": 105.0
+      "max": 105.0,
+      "siExp": 0,
+      "si": [0, 0, 0, 0, 1, 0, 0, 0],
+      "dsi": "\\degreeCelsius"
     }
 
   },

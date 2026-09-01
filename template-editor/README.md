@@ -61,7 +61,7 @@ come testo con *Copia report*.
 
 | Campo | Note |
 |---|---|
-| `schemaVersion` | forma `X.Y.Z`; attuale `2.0.0` |
+| `templateVersion` | forma `X.Y.Z`; attuale `2.0.0` |
 | `modelName` | chiave di lookup lato backend (`TemplateService`, case-insensitive) |
 | `mpn`, `manufacturer`, `datasheet` | identificazione del componente |
 | `templateId` | intero univoco (in uso: 201–204, 301) |
@@ -100,7 +100,7 @@ L'editor **non genera più** `calibration.coefficients` né
 `calibration.calibrationCoefficients`, e nemmeno `metrology.UncertaintyPdf` /
 `metrology.Uncertainty` in forma `referenceValue` / `absUncertainty` / `uc` / `k`.
 
-Se un file aperto li contiene (o dichiara `schemaVersion < 2.0.0`) compare un
+Se un file aperto li contiene (o dichiara `templateVersion < 2.0.0`) compare un
 **banner rosso** in testa alla pagina e i blocchi legacy vengono mostrati in sola
 lettura e **ricopiati identici nel file di output**. C'è un bottone esplicito per
 rimuoverli, ma è una scelta manuale.

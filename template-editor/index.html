@@ -187,8 +187,8 @@ const REQ_RANGES = ["phys", "elec", "sampling", "threshold"];
 const SUGG_RANGES = ["physROC"];
 const MINMAX_ONLY = ["threshold"];
 const REQ_PROPS = ["responseTime", "readingConsumption"];
-const REQ_ROOT = ["schemaVersion","modelName","mpn","manufacturer","datasheet","templateId","type","quantity","unit","elecUnit"];
-const ROOT_ORDER = ["schemaVersion","modelName","mpn","manufacturer","datasheet","templateId","type","quantity","unit","elecUnit"];
+const REQ_ROOT = ["templateVersion","modelName","mpn","manufacturer","datasheet","templateId","type","quantity","unit","elecUnit"];
+const ROOT_ORDER = ["templateVersion","modelName","mpn","manufacturer","datasheet","templateId","type","quantity","unit","elecUnit"];
 
 /* type = tipo di sensore (accelerometer), quantity = grandezza misurata
    (acceleration). QUANTITY_NAMES serve solo all'euristica che segnala i
@@ -257,7 +257,7 @@ function siBlock(dsi, si, siExp) { return { siExp: siExp || 0, si: si ? si.slice
 
 function defaultModel() {
   return {
-    schemaVersion: CURRENT_SCHEMA,
+    templateVersion: CURRENT_SCHEMA,
     modelName: "", mpn: "", manufacturer: "", datasheet: "", templateId: 205,
     type: "", quantity: "", unit: "\\one", elecUnit: "\\one",
     ranges: [
@@ -360,8 +360,8 @@ function parseTemplate(src) {
   /* niente valori inventati: i campi obbligatori assenti restano vuoti e
      vengono segnalati dalla validazione invece di essere riempiti d'ufficio */
   ROOT_ORDER.forEach(k => { m[k] = (k in raw) ? raw[k] : (k === "templateId" ? 0 : ""); delete raw[k]; });
-  if (cmpVer(m.schemaVersion, CURRENT_SCHEMA) < 0)
-    m.legacyFlags.push('schemaVersion "' + m.schemaVersion + '" &lt; ' + CURRENT_SCHEMA);
+  if (cmpVer(m.templateVersion, CURRENT_SCHEMA) < 0)
+    m.legacyFlags.push('templateVersion "' + m.templateVersion + '" &lt; ' + CURRENT_SCHEMA);
 
   /* ranges */
   if (isObj(raw.ranges)) {
@@ -557,7 +557,7 @@ function validate(m) {
   const W = t => msgs.push({ l: "warn", t });
 
   REQ_ROOT.forEach(k => { if (m[k] === "" || m[k] === null || m[k] === undefined) E("campo obbligatorio mancante: " + k); });
-  if (!/^\d+\.\d+\.\d+$/.test(String(m.schemaVersion))) E("schemaVersion deve avere forma X.Y.Z");
+  if (!/^\d+\.\d+\.\d+$/.test(String(m.templateVersion))) E("templateVersion deve avere forma X.Y.Z");
   if (m.modelName && /\s/.test(m.modelName)) W("modelName contiene spazi (chiave di lookup in TemplateService)");
   /* type e quantity si contrappongono: accelerometer vs acceleration */
   if (m.type && QUANTITY_NAMES.includes(m.type.toLowerCase()))
@@ -774,7 +774,7 @@ function card(title, bodyNode, collapsed) {
 
 function secIdent() {
   const g = el("div", { class: "grid g2" }, [
-    field("schemaVersion", txtInput(M, "schemaVersion"), { req: true, hint: "attuale: " + CURRENT_SCHEMA }),
+    field("templateVersion", txtInput(M, "templateVersion"), { req: true, hint: "attuale: " + CURRENT_SCHEMA }),
     field("modelName", txtInput(M, "modelName", { ph: "TemperatureSensorNTC", on: syncName }), { req: true, hint: "chiave di lookup lato backend (TemplateService, case-insensitive)" }),
     field("mpn", txtInput(M, "mpn", { ph: "NTCLP450E3", on: syncName }), { req: true }),
     field("manufacturer", txtInput(M, "manufacturer", { ph: "Vishay" }), { req: true }),

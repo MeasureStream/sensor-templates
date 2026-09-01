@@ -1,15 +1,13 @@
 {
-  "schemaVersion": "1.0.0",
+  "usercomment_tv": "templateVersion e' la versione del Template a cui il dispositivo aderisce. Sul filo (comando UART 0x31, notifica 0x11, poll 0x0B) viaggia su 1 byte: si trasmette il numero MAJOR. Un cambio di MAJOR significa ordine canonico incompatibile; MINOR e PATCH sono aggiunte in coda, retrocompatibili.",
+  "templateVersion": "1.0.0",
   "modelName": "FieldMetrologyWell_9142",
-  "calibrationCertificateID": "012-00000",
-  "issuedBy": "LAT-999",
-  "calDate": 0,
-  "calPeriod": 365,
   "mpn": "9142",
   "manufacturer": "Fluke / Hart Scientific",
   "datasheet": "fluke_well_9142.pdf",
   "templateId": 301,
   "type": "temperature_calibrator",
+  "quantity": "temperature",
   "unit": "\\degreeCelsius",
   "elecUnit": "\\degreeCelsius",
   "ranges": {
@@ -148,6 +146,10 @@
         "ub": 0.15,
         "k": 2.0
       }
-    ]
+    ],
+    "certificateId": "012-00000",
+    "issuedBy": "LAT-999",
+    "calDate": 0,
+    "calPeriod": 365
   }
 }
