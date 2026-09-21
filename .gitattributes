@@ -1,0 +1,3 @@
+# Gli script della CI girano su Linux: mai CRLF.
+*.sh text eol=lf
+*.json text eol=lf

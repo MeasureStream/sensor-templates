@@ -1,0 +1,315 @@
+{
+  "schemaVersion": "2.1.0",
+  "usercomment_sv": "schemaVersion e' la versione dello SCHEMA del documento, distinta da templateVersion che e' la versione di questo modello. Lo schema 2.1.0 aggiunge encoding, domain e transform per metrica, adcBits su ranges.elec e definisce ranges.sampling come periodo di acquisizione dello slot.",
+  "usercomment_of": "outputFormat dice se il dato che arriva e' la LETTURA grezza del sensore (uncalibrated: il server applica la formula di calibration) o la STIMA del misurando gia' tarata a bordo (calibrated: il server non converte, usa solo si/siExp/dsi per unita' e multipli). La singola metrica puo' sovrascriverlo con 'domain': elec o phys.",
+  "outputFormat": "uncalibrated",
+  "usercomment_tv": "templateVersion e' la versione del Template a cui il dispositivo aderisce. Sul filo (comando UART 0x31, notifica 0x11, poll 0x0B) viaggia su 1 byte: si trasmette il numero MAJOR. Un cambio di MAJOR significa ordine canonico incompatibile; MINOR e PATCH sono aggiunte in coda, retrocompatibili.",
+  "templateVersion": "1.0.0",
+  "modelName": "HumiditySensorHTU21D",
+  "mpn": "HPP845E031R4",
+  "manufacturer": "TE Connectivity",
+  "datasheet": "https://www.te.com/commerce/DocumentDelivery/DDEController?Action=srchrtrv&DocNm=HPC199_6&DocType=Data+Sheet&DocLang=English",
+  "templateId": 202,
+  "type": "hygrometer",
+  "quantity": "humidity",
+  "unit": "\\percent",
+  "usercomment_1": "elecUnit and elec array are relative to the reading values of the sensor, to be used along with the readingUncertainty parameters",
+  "elecUnit": "\\one",
+  "usercomment_2": "supportedMetrics: metriche che questo modello puo' produrre. 'id' e' la posizione nell'ordine canonico del protocollo v1.0 e determina l'ordine sul filo; 'class' e' la cadenza di trasmissione (BASE, EXTENDED, RARE); 'bytes' la dimensione del campo nel report FPort 0x30. Le grandezze sono quelle della misura gia' tarata.",
+  "supportedMetrics": [
+    {
+      "id": 1,
+      "name": "mean",
+      "class": "BASE",
+      "bytes": 2,
+      "encoding": "u16",
+      "domain": "elec",
+      "transform": "calibration",
+      "siExp": 0,
+      "si": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "dsi": "\\percent"
+    },
+    {
+      "id": 2,
+      "name": "variance",
+      "class": "BASE",
+      "bytes": 2,
+      "encoding": "u16",
+      "domain": "elec",
+      "transform": "variance",
+      "siExp": 0,
+      "si": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "dsi": "\\percent\\tothe{2}"
+    },
+    {
+      "id": 3,
+      "name": "max",
+      "class": "EXTENDED",
+      "bytes": 2,
+      "encoding": "u16",
+      "domain": "elec",
+      "transform": "calibration",
+      "siExp": 0,
+      "si": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "dsi": "\\percent"
+    },
+    {
+      "id": 4,
+      "name": "min",
+      "class": "EXTENDED",
+      "bytes": 2,
+      "encoding": "u16",
+      "domain": "elec",
+      "transform": "calibration",
+      "siExp": 0,
+      "si": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "dsi": "\\percent"
+    },
+    {
+      "id": 5,
+      "name": "integral",
+      "class": "EXTENDED",
+      "bytes": 4,
+      "encoding": "u32",
+      "domain": "elec",
+      "transform": "integral",
+      "siExp": 0,
+      "si": [
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "dsi": "\\percent\\second"
+    }
+  ],
+  "ranges": {
+    "phys": {
+      "min": 0.0,
+      "max": 100.0,
+      "siExp": 0,
+      "si": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "dsi": "\\percent"
+    },
+    "physROC": {
+      "min": 0.0,
+      "max": 100.0,
+      "siExp": 0,
+      "si": [
+        0,
+        0,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "dsi": "\\percent\\per\\second"
+    },
+    "elec": {
+      "min": 0.0,
+      "max": 65535.0,
+      "siExp": 0,
+      "si": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "dsi": "\\one",
+      "adcBits": 16,
+      "usercomment_adcbits": "adcBits e' l'ampiezza del CAMPO TRASMESSO nel report, non del convertitore del sensore: min e max qui sopra restano il valore elettrico che il sensore puo' davvero assumere."
+    },
+    "sampling": {
+      "min": 0.016,
+      "max": 172800.0,
+      "siExp": 0,
+      "si": [
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "dsi": "\\second",
+      "usercomment_sampling": "Periodo di acquisizione accettato dallo slot, non ODR del chip: min e' il periodo piu' breve che il sensore regge, max il piu' lungo che il protocollo sa codificare (48 h)."
+    },
+    "threshold": {
+      "min": 0.0,
+      "max": 100.0,
+      "siExp": 0,
+      "si": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "dsi": "\\percent"
+    }
+  },
+  "properties": {
+    "responseTime": 5.0,
+    "responseTimeSiExp": 0,
+    "responseTimeSi": [
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "responseTimeDsi": "\\second",
+    "readingConsumption": 0.224,
+    "readingConsumptionSiExp": -6,
+    "readingConsumptionSi": [
+      0,
+      0,
+      1,
+      1,
+      0,
+      0,
+      0,
+      0
+    ],
+    "readingConsumptionDsi": "\\coulomb"
+  },
+  "calibration": {
+    "type": "linear",
+    "usercomment_cal": "Formula di targa HTU21D: RH% = -6 + 125 * S / 2^16, con S il registro a 16 bit. I due bit meno significativi sono bit di stato e vanno azzerati prima della conversione: pesano meno di 0.006 %RH. ranges.elec descrive il registro trasmesso (16 bit), non i 14 bit utili del convertitore.",
+    "linear": "c[0] + c[1] * x",
+    "input": [
+      "x"
+    ],
+    "c": [
+      {
+        "id": 0,
+        "value": -6.0,
+        "siExp": 0,
+        "si": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "dsi": "\\percent"
+      },
+      {
+        "id": 1,
+        "value": 0.0019073486328125,
+        "siExp": 0,
+        "si": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "dsi": "\\percent"
+      }
+    ]
+  },
+  "metrology": {
+    "evaluationFormula": "uB",
+    "requiredInputs": [],
+    "readingUncertainty": [
+      {
+        "varName": "absUncertainty",
+        "value": 5.0,
+        "PDF": "uniform",
+        "description": "Worst-case scenario at 25°C"
+      },
+      {
+        "varName": "uB",
+        "value": 2.9,
+        "description": ""
+      },
+      {
+        "varName": "coverageFactor",
+        "value": 2.0,
+        "description": ""
+      }
+    ],
+    "UncertaintyPdf": "gaussian",
+    "Uncertainty": [
+      {
+        "referenceValue": 0,
+        "absUncertainty": 0,
+        "uc": 0,
+        "k": 2.0
+      }
+    ],
+    "calDate": 0,
+    "calPeriod": 365,
+    "certificateId": ""
+  }
+}

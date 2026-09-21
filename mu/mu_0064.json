@@ -1,0 +1,25 @@
+{
+  "schemaVersion": "2.1.0",
+  "usercomment_sv": "Modello 0x0064: oggi descrive esattamente cio' che il server creava a mano per questo codice, cioe' un accelerometro e un NTC. Serve a non cambiare il comportamento nel momento in cui gli slot smettono di essere scritti nel codice e diventano un documento.",
+
+  "kind": "mu",
+  "templateId": 100,
+  "usercomment_id": "100 = 0x0064.",
+
+  "templateVersion": "0.1.0",
+  "usercomment_tv": "MAJOR 0: la scheda vera monta un IIM-42652 (IMU) e un TMP126 (temperatura), non l'LSM6DSM e l'NTC citati qui. I due template mancano perche' vanno scritti dai datasheet, e finche' non ci sono questo modello resta in sviluppo. Quando arriveranno, gli slot puntano a quelli e il modello passa alla 1.0.0.",
+
+  "modelName": "MU-0064",
+  "type": "measurement_unit",
+
+  "properties": {
+    "hasFlash": null,
+    "maxSlots": 4,
+    "usercomment_flash": "Da confermare col firmware."
+  },
+
+  "slots": [
+    { "index": 0, "sensor": { "templateId": 204, "major": 1 }, "label": "acceleration", "channel": null },
+    { "index": 1, "sensor": { "templateId": 201, "major": 2 }, "label": "temperature", "channel": null }
+  ]
+}
