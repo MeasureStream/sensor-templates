@@ -1,0 +1,316 @@
+{
+  "schemaVersion": "2.1.0",
+  "usercomment_sv": "schemaVersion e' la versione dello SCHEMA del documento, distinta da templateVersion che e' la versione di questo modello. Lo schema 2.1.0 aggiunge encoding, domain e transform per metrica, adcBits su ranges.elec e definisce ranges.sampling come periodo di acquisizione dello slot.",
+  "usercomment_of": "outputFormat dice se il dato che arriva e' la LETTURA grezza del sensore (uncalibrated: il server applica la formula di calibration) o la STIMA del misurando gia' tarata a bordo (calibrated: il server non converte, usa solo si/siExp/dsi per unita' e multipli). La singola metrica puo' sovrascriverlo con 'domain': elec o phys.",
+  "outputFormat": "uncalibrated",
+  "usercomment_tv": "templateVersion e' la versione del Template a cui il dispositivo aderisce. Sul filo (comando UART 0x31, notifica 0x11, poll 0x0B) viaggia su 1 byte: si trasmette il numero MAJOR. Un cambio di MAJOR significa ordine canonico incompatibile; MINOR e PATCH sono aggiunte in coda, retrocompatibili.",
+  "templateVersion": "1.0.0",
+  "modelName": "PressureSensorMS5837",
+  "mpn": "MS5837-02BA01",
+  "manufacturer": "TE Connectivity",
+  "datasheet": "https://www.te.com/usa-en/product-MS5837-02BA01.html",
+  "templateId": 203,
+  "type": "barometer",
+  "quantity": "pressure",
+  "unit": "\\millibar",
+  "usercomment_1": "elecUnit and elec array are relative to the reading values of the sensor, to be used along with the readingUncertainty parameters",
+  "elecUnit": "\\one",
+  "usercomment_2": "supportedMetrics: metriche che questo modello puo' produrre. 'id' e' la posizione nell'ordine canonico del protocollo v1.0 e determina l'ordine sul filo; 'class' e' la cadenza di trasmissione (BASE, EXTENDED, RARE); 'bytes' la dimensione del campo nel report FPort 0x30. Le grandezze sono quelle della misura gia' tarata.",
+  "supportedMetrics": [
+    {
+      "id": 1,
+      "name": "mean",
+      "class": "BASE",
+      "bytes": 2,
+      "encoding": "u16",
+      "domain": "elec",
+      "transform": "calibration",
+      "siExp": 2,
+      "si": [
+        0,
+        -1,
+        -2,
+        0,
+        0,
+        0,
+        1,
+        0
+      ],
+      "dsi": "\\millibar"
+    },
+    {
+      "id": 2,
+      "name": "variance",
+      "class": "BASE",
+      "bytes": 2,
+      "encoding": "u16",
+      "domain": "elec",
+      "transform": "variance",
+      "siExp": 4,
+      "si": [
+        0,
+        -2,
+        -4,
+        0,
+        0,
+        0,
+        2,
+        0
+      ],
+      "dsi": "\\millibar\\tothe{2}"
+    },
+    {
+      "id": 3,
+      "name": "max",
+      "class": "EXTENDED",
+      "bytes": 2,
+      "encoding": "u16",
+      "domain": "elec",
+      "transform": "calibration",
+      "siExp": 2,
+      "si": [
+        0,
+        -1,
+        -2,
+        0,
+        0,
+        0,
+        1,
+        0
+      ],
+      "dsi": "\\millibar"
+    },
+    {
+      "id": 4,
+      "name": "min",
+      "class": "EXTENDED",
+      "bytes": 2,
+      "encoding": "u16",
+      "domain": "elec",
+      "transform": "calibration",
+      "siExp": 2,
+      "si": [
+        0,
+        -1,
+        -2,
+        0,
+        0,
+        0,
+        1,
+        0
+      ],
+      "dsi": "\\millibar"
+    },
+    {
+      "id": 5,
+      "name": "integral",
+      "class": "EXTENDED",
+      "bytes": 4,
+      "encoding": "u32",
+      "domain": "elec",
+      "transform": "integral",
+      "siExp": 2,
+      "si": [
+        0,
+        -1,
+        -1,
+        0,
+        0,
+        0,
+        1,
+        0
+      ],
+      "dsi": "\\millibar\\second"
+    }
+  ],
+  "ranges": {
+    "phys": {
+      "min": 10.0,
+      "max": 2000.0,
+      "siExp": 2,
+      "si": [
+        0,
+        -1,
+        -2,
+        0,
+        0,
+        0,
+        1,
+        0
+      ],
+      "dsi": "\\millibar"
+    },
+    "physROC": {
+      "min": 0.0,
+      "max": 2000.0,
+      "siExp": 2,
+      "si": [
+        0,
+        -1,
+        -3,
+        0,
+        0,
+        0,
+        1,
+        0
+      ],
+      "dsi": "\\millibar\\per\\second"
+    },
+    "elec": {
+      "min": 0.0,
+      "max": 16777215.0,
+      "siExp": 0,
+      "si": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "dsi": "\\one",
+      "adcBits": 16,
+      "usercomment_adcbits": "adcBits e' l'ampiezza del CAMPO TRASMESSO nel report, non del convertitore del sensore: min e max qui sopra restano il valore elettrico che il sensore puo' davvero assumere.",
+      "usercomment_check": "Il campo trasmesso porta decimi di mbar, non il codice del convertitore: il controllo di fuori range per questo modello si fa su ranges.phys. min e max qui restano quelli del convertitore a 24 bit del sensore."
+    },
+    "sampling": {
+      "min": 0.0172,
+      "max": 172800.0,
+      "siExp": 0,
+      "si": [
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "dsi": "\\second",
+      "usercomment_sampling": "Periodo di acquisizione accettato dallo slot, non ODR del chip: min e' il periodo piu' breve che il sensore regge, max il piu' lungo che il protocollo sa codificare (48 h)."
+    },
+    "threshold": {
+      "min": 10.0,
+      "max": 2000.0,
+      "siExp": 2,
+      "si": [
+        0,
+        -1,
+        -2,
+        0,
+        0,
+        0,
+        1,
+        0
+      ],
+      "dsi": "\\millibar"
+    }
+  },
+  "properties": {
+    "responseTime": 0.0172,
+    "responseTimeSiExp": 0,
+    "responseTimeSi": [
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "responseTimeDsi": "\\second",
+    "readingConsumption": 21.5,
+    "readingConsumptionSiExp": -6,
+    "readingConsumptionSi": [
+      0,
+      0,
+      1,
+      1,
+      0,
+      0,
+      0,
+      0
+    ],
+    "readingConsumptionDsi": "\\coulomb"
+  },
+  "calibration": {
+    "type": "linear",
+    "usercomment_cal": "La MU trasmette la pressione gia' composta dal convertitore a 24 bit e scalata a decimi di mbar su 16 bit: la conversione residua e' una divisione per 10. ranges.elec descrive il convertitore del sensore, non il campo a 2 byte del report.",
+    "linear": "c[0] + c[1] * x",
+    "input": [
+      "x"
+    ],
+    "c": [
+      {
+        "id": 0,
+        "value": 0.0,
+        "siExp": 0,
+        "si": [
+          0,
+          -1,
+          -2,
+          0,
+          0,
+          1,
+          0,
+          0
+        ],
+        "dsi": "\\milli\\bar"
+      },
+      {
+        "id": 1,
+        "value": 0.1,
+        "siExp": 0,
+        "si": [
+          0,
+          -1,
+          -2,
+          0,
+          0,
+          1,
+          0,
+          0
+        ],
+        "dsi": "\\milli\\bar"
+      }
+    ]
+  },
+  "metrology": {
+    "evaluationFormula": "uB",
+    "requiredInputs": [],
+    "readingUncertainty": [
+      {
+        "varName": "absUncertainty",
+        "value": 4.0,
+        "PDF": "uniform",
+        "description": "Worst-case scenario"
+      },
+      {
+        "varName": "uB",
+        "value": 2.31,
+        "description": ""
+      },
+      {
+        "varName": "coverageFactor",
+        "value": 2.0,
+        "description": ""
+      }
+    ],
+    "UncertaintyPdf": "gaussian",
+    "Uncertainty": [
+      {
+        "referenceValue": 0,
+        "absUncertainty": 0,
+        "uc": 0,
+        "k": 2.0
+      }
+    ],
+    "calDate": 0,
+    "calPeriod": 365,
+    "certificateId": ""
+  }
+}

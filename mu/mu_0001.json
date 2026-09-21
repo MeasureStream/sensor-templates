@@ -1,0 +1,58 @@
+{
+  "schemaVersion": "2.1.0",
+  "usercomment_sv": "Modello di MU: dice quali sensori ci sono e in che ORDINE, perche' l'ordine degli slot e' l'ordine dei campi nei comandi di configurazione (0x21) e nei report dati (0x30). Cambiarlo dopo il rilascio rompe i dispositivi in campo, quindi e' congelato dal MAJOR di templateVersion.",
+  "kind": "mu",
+  "templateId": 1,
+  "usercomment_id": "templateId e' il codice del modello che la MU dichiara nella notifica di topologia: 1 = 0x0001.",
+  "templateVersion": "0.1.0",
+  "usercomment_tv": "MAJOR 0 = sviluppo, e qui serve davvero: questo documento descrive la MU COM'E' ORA, per restare compatibile con il firmware attuale, non come dovra' essere. Il firmware trasmette ancora un canale di accelerometro in posizione 0 che vale sempre 0x0000. Quando il firmware perdera' quello slot si pubblica la 1.0.0 con i soli pressione, umidita' e NTC: sara' un MAJOR nuovo perche' le posizioni sul filo si spostano tutte di uno.",
+  "modelName": "MU-0001",
+  "type": "measurement_unit",
+  "properties": {
+    "hasFlash": null,
+    "usercomment_flash": "Presenza della memoria flash a bordo: da confermare col firmware, non e' deducibile dai documenti disponibili. null significa 'non dichiarato', non 'assente'.",
+    "maxSlots": 4,
+    "usercomment_slots": "MAX_MODULE_SENSORS del firmware (peripheral.h): quattro slot, tutti occupati.",
+    "mcu": "STM32WB30"
+  },
+  "usercomment_slots": "Ogni slot cita il template del sensore come coppia (templateId, MAJOR): mai la versione completa, cosi' una correzione MINOR del template del sensore non obbliga a pubblicare un nuovo modello di MU. index parte da 0, come le posizioni sul filo.",
+  "slots": [
+    {
+      "index": 0,
+      "sensor": {
+        "templateId": 204,
+        "major": 1
+      },
+      "label": "acceleration",
+      "channel": null,
+      "usercomment": "Slot di compatibilita': l'LSM6DSM di questa scheda non da' letture valide e trasmette sempre 0x0000. Resta dichiarato perche' occupa comunque due byte nel report e togliendolo si sposterebbero le posizioni di tutti gli altri."
+    },
+    {
+      "index": 1,
+      "sensor": {
+        "templateId": 203,
+        "major": 1
+      },
+      "label": "pressure",
+      "channel": null
+    },
+    {
+      "index": 2,
+      "sensor": {
+        "templateId": 202,
+        "major": 1
+      },
+      "label": "humidity",
+      "channel": null
+    },
+    {
+      "index": 3,
+      "sensor": {
+        "templateId": 201,
+        "major": 2
+      },
+      "label": "temperature",
+      "channel": null
+    }
+  ]
+}

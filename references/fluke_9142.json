@@ -1,4 +1,5 @@
 {
+  "schemaVersion": "2.1.0",
   "usercomment_tv": "templateVersion e' la versione del Template a cui il dispositivo aderisce. Sul filo (comando UART 0x31, notifica 0x11, poll 0x0B) viaggia su 1 byte: si trasmette il numero MAJOR. Un cambio di MAJOR significa ordine canonico incompatibile; MINOR e PATCH sono aggiunte in coda, retrocompatibili.",
   "templateVersion": "1.0.0",
   "modelName": "FieldMetrologyWell_9142",

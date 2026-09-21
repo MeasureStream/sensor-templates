@@ -1,0 +1,39 @@
+name: Registro dei template
+
+# Sulla pull request si chiede solo il referto: nessuna scrittura.
+# Al merge su main i documenti finiscono nel registro di sensor-manager, senza toccare la Pi
+# e senza riavviare niente: la pubblicazione aggiorna la cache del registro all'istante.
+on:
+  pull_request:
+    paths: ["sensors/**", "references/**", "mu/**", "cu/**", "protocol/**"]
+  push:
+    branches: [main]
+    paths: ["sensors/**", "references/**", "mu/**", "cu/**", "protocol/**"]
+  workflow_dispatch:
+
+jobs:
+  templates:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Rendi eseguibili gli script
+        run: chmod +x ci/*.sh
+
+      - name: Referto senza pubblicare
+        if: github.event_name == 'pull_request'
+        env:
+          TEMPLATE_API_URL: ${{ secrets.TEMPLATE_API_URL }}
+          KEYCLOAK_TOKEN_URL: ${{ secrets.KEYCLOAK_TOKEN_URL }}
+          TEMPLATE_CLIENT_ID: ${{ secrets.TEMPLATE_CLIENT_ID }}
+          TEMPLATE_CLIENT_SECRET: ${{ secrets.TEMPLATE_CLIENT_SECRET }}
+        run: ./ci/publish-templates.sh --dry-run
+
+      - name: Pubblica nel registro
+        if: github.event_name != 'pull_request'
+        env:
+          TEMPLATE_API_URL: ${{ secrets.TEMPLATE_API_URL }}
+          KEYCLOAK_TOKEN_URL: ${{ secrets.KEYCLOAK_TOKEN_URL }}
+          TEMPLATE_CLIENT_ID: ${{ secrets.TEMPLATE_CLIENT_ID }}
+          TEMPLATE_CLIENT_SECRET: ${{ secrets.TEMPLATE_CLIENT_SECRET }}
+        run: ./ci/publish-templates.sh

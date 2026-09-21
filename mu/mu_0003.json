@@ -1,0 +1,33 @@
+{
+  "schemaVersion": "2.1.0",
+  "usercomment_sv": "Modello di MU a sei assi: tre slot di accelerazione e tre di velocita' angolare, tutti dallo stesso LSM6DSM. Sei slot e non due file di template: i tre assi condividono ogni campo del template (fondo scala, sensibilita', rumore, ODR), quindi l'identita' dell'asse vive qui, nel modello di dispositivo, non nel template del sensore.",
+
+  "kind": "mu",
+  "templateId": 3,
+  "usercomment_id": "3 = 0x0003, modello nuovo: non sostituisce lo 0x0001, che resta senza IMU.",
+
+  "templateVersion": "0.1.0",
+  "usercomment_tv": "MAJOR 0 = sviluppo: finche' resta 0 questa versione si puo' sovrascrivere pubblicandola di nuovo, ed e' quello che serve mentre il firmware impara a leggere il giroscopio. Al primo dispositivo in campo si passa alla 1.0.0 e il documento diventa immutabile.",
+
+  "modelName": "MU-0003",
+  "type": "measurement_unit",
+
+  "properties": {
+    "hasFlash": null,
+    "usercomment_flash": "Da confermare col firmware.",
+    "maxSlots": 6,
+    "usercomment_slots": "Richiede di alzare MAX_MODULE_SENSORS del firmware da 4 a 6 (peripheral.h). Ogni sensor_config_t porta un buffer da 512 byte, quindi il costo in RAM va verificato sui 48 kB dell'STM32WB30 prima di salire ancora.",
+    "mcu": "STM32WB30"
+  },
+
+  "usercomment_variante": "Una variante con anche pressione, umidita' e NTC (nove slot) sarebbe un altro modello, non una MINOR di questo: aggiungere slot in coda e' retrocompatibile solo se il firmware li trasmette sempre dopo i sei esistenti.",
+
+  "slots": [
+    { "index": 0, "sensor": { "templateId": 204, "major": 1 }, "label": "acceleration", "channel": "X" },
+    { "index": 1, "sensor": { "templateId": 204, "major": 1 }, "label": "acceleration", "channel": "Y" },
+    { "index": 2, "sensor": { "templateId": 204, "major": 1 }, "label": "acceleration", "channel": "Z" },
+    { "index": 3, "sensor": { "templateId": 205, "major": 2 }, "label": "angular_velocity", "channel": "X" },
+    { "index": 4, "sensor": { "templateId": 205, "major": 2 }, "label": "angular_velocity", "channel": "Y" },
+    { "index": 5, "sensor": { "templateId": 205, "major": 2 }, "label": "angular_velocity", "channel": "Z" }
+  ]
+}
