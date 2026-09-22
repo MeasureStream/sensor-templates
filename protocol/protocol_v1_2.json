@@ -1,0 +1,71 @@
+{
+  "schemaVersion": "2.1.0",
+  "usercomment_sv": "Dizionario del protocollo: le tabelle che finora stavano scritte a mano nel codice del server e dell'interfaccia. Sul filo non viaggia un periodo ma un INDICE su un byte, e la scala indice -> tempo non e' lineare: finche' quella tabella e' duplicata, correggerne una copia e dimenticare l'altra fa mostrare all'utente un valore diverso da quello inviato al dispositivo.",
+
+  "kind": "protocol",
+  "templateId": 1,
+  "usercomment_id": "C'e' una sola famiglia di protocollo, quindi templateId 1. E' la VERSIONE a identificare il dizionario: 1.2.0 descrive il protocollo v1.2.",
+
+  "templateVersion": "1.2.0",
+  "modelName": "MeasureStream-Protocol",
+  "type": "protocol_dictionary",
+
+  "usercomment_periods": "value(idx) = base + (idx - from) * step, in secondi. Una sola forma per entrambe le scale, cosi' chi la legge non deve conoscere gli scalini: li ricava. 'ticks' sono gli indici su cui l'interfaccia mette una tacca sotto lo slider: sono indici veri, l'etichetta la calcola chi disegna con la stessa funzione che etichetta il cursore.",
+
+  "periods": {
+
+    "sampling": {
+      "description": "Periodo di acquisizione di uno slot sensore. Comando 0x21.",
+      "unit": "second",
+      "off": 0,
+      "minIndex": 0,
+      "maxIndex": 246,
+      "ticks": [0, 46, 65, 84, 222, 246],
+      "segments": [
+        { "from": 1,   "to": 9,   "base": 0.001, "step": 0.001 },
+        { "from": 10,  "to": 27,  "base": 0.010, "step": 0.005 },
+        { "from": 28,  "to": 45,  "base": 0.100, "step": 0.050 },
+        { "from": 46,  "to": 54,  "base": 1,     "step": 1 },
+        { "from": 55,  "to": 64,  "base": 10,    "step": 5 },
+        { "from": 65,  "to": 73,  "base": 60,    "step": 60 },
+        { "from": 74,  "to": 83,  "base": 600,   "step": 300 },
+        { "from": 84,  "to": 222, "base": 3600,  "step": 600 },
+        { "from": 223, "to": 246, "base": 90000, "step": 3600 }
+      ]
+    },
+
+    "transmission": {
+      "description": "Periodo di trasmissione della CU. Comando 0x22. Il server lo usa anche per decidere se una CU e' online: soglia = max(30 min, 2 x periodo).",
+      "unit": "second",
+      "off": 0,
+      "minIndex": 0,
+      "maxIndex": 240,
+      "ticks": [0, 24, 48, 96, 240],
+      "segments": [
+        { "from": 1,   "to": 96,  "base": 900,   "step": 900 },
+        { "from": 97,  "to": 240, "base": 90000, "step": 3600 },
+        { "from": 255, "to": 255, "base": 60,    "step": 0,
+          "usercomment": "Indice speciale fuori scala: un minuto, il periodo piu' breve possibile." }
+      ]
+    }
+  },
+
+  "usercomment_sentinels": "Valori che non sono misure ma stati. Sono quelli che il codice implementa davvero oggi, non quelli che potrebbero esistere.",
+  "sentinels": {
+    "battery": [
+      { "value": 254, "meaning": "ac_powered", "description": "Alimentazione da rete: il livello di carica non ha senso." },
+      { "value": 255, "meaning": "charging",   "description": "In carica." }
+    ],
+    "metric": [
+      { "value": 65535, "appliesTo": "mean_and_variance", "meaning": "no_new_data",
+        "description": "Media e varianza entrambe a 0xFFFF: nessun dato nuovo nell'intervallo, di solito Trans. T piu' breve di Sampl. T. 0x0000 e' invece un valore legittimo." }
+    ]
+  },
+
+  "usercomment_status": "Bit della parola di stato della CU. Il byte arriva (statusRaw della FPort 10) ma nessun bit e' documentato ne' decodificato: l'elenco resta vuoto finche' non c'e' una fonte, perche' inventarlo qui significherebbe scriverlo nel posto in cui tutti lo leggeranno come vero.",
+  "statusBits": [],
+
+  "usercomment_events": "Stessa regola per i codici evento della 0xA2 e per i bit della parola di allarme 0xA0: arrivano con il passo 17.",
+  "eventCodes": [],
+  "alarmBits": []
+}
