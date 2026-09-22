@@ -87,8 +87,15 @@ ALTERNATIVA SCARTATA
 
 
 ================================================================================
-  TODO 2 - Deserializzazione dei template lato backend        [ DA VERIFICARE ]
+  TODO 2 - Deserializzazione dei template lato backend              [ CHIUSO ]
 ================================================================================
+
+  CHIUSO il 14/09/2026. Il timore era fondato a meta': l'ObjectMapper e' quello di
+  Spring, iniettato, quindi ignora i campi sconosciuti e i template si caricavano.
+  Il guasto vero era un altro e stava altrove: SensorDecoder confrontava il nome del
+  FILE mentre il database contiene il modelName, quindi la conversione non entrava
+  mai in funzione. Dal 23/09/2026 SensorDecoder non esiste piu': le formule stanno
+  nei template e le valuta SensorConversion.
 
   SensorTemplate.kt dichiara sette campi e non ha
   @JsonIgnoreProperties(ignoreUnknown = true); TemplateService usa un
@@ -114,8 +121,16 @@ ALTERNATIVA SCARTATA
 
 
 ================================================================================
-  TODO 3 - Migrazione alla semantica 2.0.0                         [ APERTO ]
+  TODO 3 - Migrazione alla semantica 2.0.0                          [ CHIUSO ]
 ================================================================================
+
+  CHIUSO il 21/09/2026 con lo schema 2.1.0: accelerometro, umidita' e pressione sono
+  passati alla forma con la formula esplicita, e il server le legge davvero. La
+  vecchia coppia coefficients + calibrationCoefficients non va piu' prodotta.
+
+  Nota emersa durante la migrazione: la formula dell'NTC dava kelvin mentre il
+  template dichiara gradi Celsius: la sottrazione di 273,15 viveva nel codice. E'
+  ora dentro la formula, versione 2.0.1.
 
   ntc_temperature e gyroscope_lsm6dsm usano la semantica corrente: formula
   esplicita sotto una chiave omonima a calibration.type, ingressi in input[],

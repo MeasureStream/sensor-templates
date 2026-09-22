@@ -4,7 +4,7 @@
   "usercomment_of": "outputFormat dice se il dato che arriva e' la LETTURA grezza del sensore (uncalibrated: il server applica la formula di calibration) o la STIMA del misurando gia' tarata a bordo (calibrated: il server non converte, usa solo si/siExp/dsi per unita' e multipli). La singola metrica puo' sovrascriverlo con 'domain': elec o phys.",
   "outputFormat": "uncalibrated",
   "usercomment_tv": "templateVersion e' la versione del Template a cui il dispositivo aderisce. Sul filo (comando UART 0x31, notifica 0x11, poll 0x0B) viaggia su 1 byte: si trasmette il numero MAJOR. Un cambio di MAJOR significa ordine canonico incompatibile; MINOR e PATCH sono aggiunte in coda, retrocompatibili.",
-  "templateVersion": "2.0.0",
+  "templateVersion": "2.0.1",
   "modelName": "TemperatureSensorNTC",
   "mpn": "NTCLP450E3",
   "manufacturer": "Vishay",
@@ -252,7 +252,7 @@
   },
   "calibration": {
     "type": "steinhart_201",
-    "steinhart_201": "1.0 / (c[0] + c[1] * ln(4095.0 / x - 1.0) + c[2] * ln(4095.0 / x - 1.0)**3)",
+    "steinhart_201": "1.0 / (c[0] + c[1] * ln(4095.0 / x - 1.0) + c[2] * ln(4095.0 / x - 1.0)**3) - 273.15",
     "input": [
       "x"
     ],
@@ -387,7 +387,8 @@
         ],
         "dsi": "\\kelvin\\tothe{-1}"
       }
-    }
+    },
+    "usercomment_kelvin": "La Steinhart-Hart da' una temperatura in kelvin, mentre unit e i dsi delle metriche dichiarano gradi Celsius: la conversione finale fa parte della formula, non del codice che la valuta. Fino alla 2.0.0 quella sottrazione stava dentro SensorDecoder e il template, letto da solo, era incoerente."
   },
   "metrology": {
     "evaluationFormula": "uB",
