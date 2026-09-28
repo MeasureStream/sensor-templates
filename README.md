@@ -16,8 +16,8 @@ l'unica fonte a runtime (`GET /API/templates`).
 | `cu/` | `cu` | modello di CU | Limiti e capacità della CU: numero di MU, GPS, alimentazione | Le CU censite dal server |
 | `protocol/` | `protocol` | `ProtocolVer` | Dizionario del protocollo: codifiche dei periodi, bit di stato, codici evento | Server e interfaccia |
 
-`mu/`, `cu/` e `protocol/` sono predisposte: i primi documenti arrivano con i passi 9 e 12
-della scaletta. Ogni documento è identificato dalla coppia **(`templateId`, MAJOR)**: un
+`mu/` e `protocol/` sono popolate: tre modelli di MU e il dizionario del protocollo v1.2.
+`cu/` aspetta il passo 15. Ogni documento è identificato dalla coppia **(`templateId`, MAJOR)**: un
 riferimento cita sempre il MAJOR, mai la versione completa, e il registro risolve la
 versione pubblicata più alta dentro quel MAJOR.
 
