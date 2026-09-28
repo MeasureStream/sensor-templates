@@ -6,7 +6,7 @@
   "templateId": 1,
   "usercomment_id": "C'e' una sola famiglia di protocollo, quindi templateId 1. E' la VERSIONE a identificare il dizionario: 1.2.0 descrive il protocollo v1.2.",
 
-  "templateVersion": "1.2.0",
+  "templateVersion": "1.2.1",
   "modelName": "MeasureStream-Protocol",
   "type": "protocol_dictionary",
 
@@ -62,10 +62,74 @@
     ]
   },
 
-  "usercomment_status": "Bit della parola di stato della CU. Il byte arriva (statusRaw della FPort 10) ma nessun bit e' documentato ne' decodificato: l'elenco resta vuoto finche' non c'e' una fonte, perche' inventarlo qui significherebbe scriverlo nel posto in cui tutti lo leggeranno come vero.",
-  "statusBits": [],
+  "usercomment_metrics": "Ordine canonico delle metriche (tabella 4.6 della documentazione v1.2). E' una tabella versionata, non codice: le metriche nuove si aggiungono solo in coda, mai in mezzo, perche' l'ordine e' quello in cui i campi viaggiano nel report. 'class' e' una CADENZA di trasmissione, non una categoria: BASE ed EXTENDED escono a ogni CU Trans. T, RARE a un multiplo configurabile. 'bit' e' la posizione nella Stat bitmap della 0x23 e vale sempre id - 1.",
+  "metrics": [
+    { "id": 1,  "bit": 0,  "name": "mean",     "bytes": 2, "class": "BASE",     "label": "Media" },
+    { "id": 2,  "bit": 1,  "name": "variance", "bytes": 2, "class": "BASE",     "label": "Varianza",
+      "description": "Di popolazione. Satura a 0xFFFF: si legge come «almeno 65535»." },
+    { "id": 3,  "bit": 2,  "name": "max",      "bytes": 2, "class": "EXTENDED", "label": "Massimo" },
+    { "id": 4,  "bit": 3,  "name": "min",      "bytes": 2, "class": "EXTENDED", "label": "Minimo" },
+    { "id": 5,  "bit": 4,  "name": "integral", "bytes": 4, "class": "EXTENDED", "label": "Integrale",
+      "description": "Quattro byte: a due saturava sempre." },
+    { "id": 6,  "bit": 5,  "name": "tot_h",    "bytes": 2, "class": "EXTENDED", "label": "Tempo oltre soglia alta",
+      "unit": "second", "description": "Richiede che la soglia alta sia configurata." },
+    { "id": 7,  "bit": 6,  "name": "tot_l",    "bytes": 2, "class": "EXTENDED", "label": "Tempo oltre soglia bassa",
+      "unit": "second", "description": "Richiede che la soglia bassa sia configurata." },
+    { "id": 8,  "bit": 7,  "name": "median",   "bytes": 2, "class": "RARE",     "label": "Mediana" },
+    { "id": 9,  "bit": 8,  "name": "p_high",   "bytes": 2, "class": "RARE",     "label": "Percentile alto" },
+    { "id": 10, "bit": 9,  "name": "p_low",    "bytes": 2, "class": "RARE",     "label": "Percentile basso" },
+    { "id": 11, "bit": 10, "name": "zcr",      "bytes": 2, "class": "RARE",     "label": "ZCR",
+      "description": "Solo dove il segnale oscilla intorno a zero." }
+  ],
 
-  "usercomment_events": "Stessa regola per i codici evento della 0xA2 e per i bit della parola di allarme 0xA0: arrivano con il passo 17.",
+  "usercomment_content": "Byte CONTENT dell'header del report 0x30: dice quali CLASSI di metriche sono presenti in quel report. Serve a ridurre i pacchetti senza cambiare formato: mandare EXTENDED una volta ogni n cicli riduce il traffico nella stessa proporzione. I bit 3-6 sono riservati, il bit 7 e' la continuazione.",
+  "contentClasses": [
+    { "bit": 0, "class": "BASE" },
+    { "bit": 1, "class": "EXTENDED" },
+    { "bit": 2, "class": "RARE" }
+  ],
+
+  "usercomment_frag": "Byte FRAG dell'header del report 0x30. Un report non frammentato vale 0x80: il caso normale non e' un caso speciale, chi riceve accumula sempre finche' non vede il bit 7. La documentazione segnala che manca un identificatore di report (un frammento centrale perso confonderebbe due report consecutivi): la regola scritta qui e' quella che il server applica.",
+  "fragmentation": {
+    "lastBit": 7,
+    "indexMask": 127,
+    "resetOnIndexZero": true,
+    "timeoutSeconds": 900
+  },
+
+  "usercomment_status": "I sedici bit della parola di stato della CU, dai due byte Status del poll 0x0B. I bit di 'stato' si ricalcolano a ogni poll e si spengono da soli; i bit di 'evento' sono latch e restano alzati finche' il server non li conferma nel downlink. Il bit 15 e' la continuazione.",
+  "statusBits": [
+    { "bit": 0,  "kind": "state", "meaning": "queued_data",        "description": "Dati in coda da trasmettere" },
+    { "bit": 1,  "kind": "state", "meaning": "config_pending",     "description": "Configurazione in attesa o blocchi mancanti" },
+    { "bit": 2,  "kind": "state", "meaning": "alarm_active",       "description": "Allarme attivo nel sistema" },
+    { "bit": 3,  "kind": "state", "meaning": "mu_offline",         "description": "Almeno una MU offline" },
+    { "bit": 4,  "kind": "state", "meaning": "sensor_fault",       "description": "Almeno un sensore guasto" },
+    { "bit": 5,  "kind": "state", "meaning": "battery_low",        "description": "Batteria della CU bassa" },
+    { "bit": 6,  "kind": "state", "meaning": "gps_fix",            "description": "GPS agganciato" },
+    { "bit": 7,  "kind": "state", "meaning": "flash_full",         "description": "Flash quasi piena o in errore" },
+    { "bit": 8,  "kind": "event", "meaning": "reset",              "description": "CU resettata dall'ultimo contatto" },
+    { "bit": 9,  "kind": "event", "meaning": "config_rejected",    "description": "Ultima configurazione rifiutata" },
+    { "bit": 10, "kind": "state", "meaning": "duty_cycle",         "description": "Throttling del duty cycle attivo" },
+    { "bit": 11, "kind": "state", "meaning": "time_sync_expired",  "description": "Sincronizzazione del tempo scaduta" },
+    { "bit": 12, "kind": "event", "meaning": "topology_changed",   "description": "Topologia delle MU cambiata" },
+    { "bit": 13, "kind": "event", "meaning": "tamper",             "description": "Tamper rilevato" }
+  ],
+
+  "usercomment_mu_status": "La parola di stato di una MU, dal comando 0x12. I bit 0-6 arrivano dalla MU sul bus UART (comando 0xB0) e la CU li inoltra senza tradurli; i bit 7-9 sono quelli che solo la CU puo' conoscere. Il bit 15 e' la continuazione.",
+  "muStatusBits": [
+    { "bit": 0, "origin": "mu", "meaning": "sampling",        "description": "Campionamento in corso" },
+    { "bit": 1, "origin": "mu", "meaning": "calibrating",     "description": "Taratura in corso" },
+    { "bit": 2, "origin": "mu", "meaning": "alarm_active",    "description": "Allarme attivo" },
+    { "bit": 3, "origin": "mu", "meaning": "alarm_undelivered","description": "Allarme non consegnato" },
+    { "bit": 4, "origin": "mu", "meaning": "abnormal_reset",  "description": "Reset anomalo" },
+    { "bit": 5, "origin": "mu", "meaning": "i2c_stuck",       "description": "Bus I2C bloccato" },
+    { "bit": 6, "origin": "mu", "meaning": "sensor_init_failed", "description": "Inizializzazione dei sensori fallita" },
+    { "bit": 7, "origin": "cu", "meaning": "online",          "description": "MU online" },
+    { "bit": 8, "origin": "cu", "meaning": "cfg_mismatch",    "description": "Disallineamento del CFG_VER" },
+    { "bit": 9, "origin": "cu", "meaning": "battery_low",     "description": "Batteria della MU bassa" }
+  ],
+
+  "usercomment_events": "I codici evento della 0xA2 e i bit della parola di allarme 0xA0 restano nel catalogo del server finche' non sono una tabella sola con quella del firmware: duplicarli qui adesso significherebbe avere due verita' diverse sullo stesso byte.",
   "eventCodes": [],
   "alarmBits": []
 }
