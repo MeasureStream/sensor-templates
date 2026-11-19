@@ -1,0 +1,17 @@
+{
+  "schemaVersion": "2.2.0",
+  "kind": "profile",
+  "templateId": 502,
+  "templateVersion": "1.0.0",
+  "modelName": "ProfiloBeniCulturaliEN15757",
+  "name": "Beni culturali igroscopici, clima storico (EN 15757)",
+  "usercomment_scope": "Per i materiali organici igroscopici la EN 15757 non fissa limiti assoluti di umidita' relativa: il riferimento e' il clima storico a cui l'oggetto si e' acclimatato. I limiti si ricavano dai dati del punto di controllo stesso, quando ce ne sono abbastanza.",
+  "quantity": "relativeHumidity",
+  "dsi": "\\percent",
+  "usercomment_historicClimate": "Ciclo stagionale: media mobile centrata su movingAverageDays giorni. Fluttuazioni a breve termine: scarti dalla media mobile, con la banda fra i percentili 7 e 93 calcolata su un anno di dati; se la banda e' piu' stretta di ±minHalfBand punti di umidita' la si allarga a quel valore. Servono minHistoryDays giorni di dati (un anno piu' la finestra della media centrata). I valori di minHalfBand e dei percentili vanno riscontrati sul testo della norma prima dell'uso in un audit.",
+  "historicClimate": { "movingAverageDays": 30, "percentiles": [7, 93], "minHalfBand": 10.0, "minHistoryDays": 395 },
+  "intervals": { "calibration": "P1Y", "intermediateCheck": "P6M" },
+  "recordRetention": "P10Y",
+  "decisionRule": { "type": "guarded", "guardBand": "U", "guardZoneOpensExcursionAfter": "PT6H" },
+  "sources": ["EN 15757:2010 §4"]
+}
