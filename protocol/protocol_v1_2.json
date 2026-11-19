@@ -4,7 +4,7 @@
   "kind": "protocol",
   "templateId": 1,
   "usercomment_id": "C'e' una sola famiglia di protocollo, quindi templateId 1. E' la VERSIONE a identificare il dizionario: 1.2.0 descrive il protocollo v1.2.",
-  "templateVersion": "1.2.2",
+  "templateVersion": "1.2.3",
   "modelName": "MeasureStream-Protocol",
   "type": "protocol_dictionary",
   "usercomment_periods": "value(idx) = base + (idx - from) * step, in secondi. Una sola forma per entrambe le scale, cosi' chi la legge non deve conoscere gli scalini: li ricava. 'ticks' sono gli indici su cui l'interfaccia mette una tacca sotto lo slider: sono indici veri, l'etichetta la calcola chi disegna con la stessa funzione che etichetta il cursore.",
@@ -237,7 +237,7 @@
       "description": "Solo dove il segnale oscilla intorno a zero."
     }
   ],
-  "usercomment_content": "Byte CONTENT dell'header del report 0x30: dice quali CLASSI di metriche sono presenti in quel report. Serve a ridurre i pacchetti senza cambiare formato: mandare EXTENDED una volta ogni n cicli riduce il traffico nella stessa proporzione. I bit 3-6 sono riservati, il bit 7 e' la continuazione.",
+  "usercomment_content": "Byte CONTENT dell'header del report 0x30: dice quali CLASSI di metriche sono presenti in quel report. Serve a ridurre i pacchetti senza cambiare formato: mandare EXTENDED una volta ogni n cicli riduce il traffico nella stessa proporzione. I bit 4-6 sono riservati, il bit 7 e' la continuazione. Dalla 1.2.3 il bit 3 non e' una classe: annuncia il byte di eta' (contentFlags).",
   "contentClasses": [
     {
       "bit": 0,
@@ -250,6 +250,16 @@
     {
       "bit": 2,
       "class": "RARE"
+    }
+  ],
+  "usercomment_contentFlags": "Dizionario 1.2.3 (specifica § 8): i bit di CONTENT che non sono classi ma annunciano un campo in piu' dopo FRAG. Il bit 3 dichiara il byte di eta' delle statistiche alla trasmissione, codificato come il Δt di allarmi ed eventi (ElapsedTime, § 4.13), solo nel frammento 0. ProtoVer resta 0x12. Un firmware che non alza il bit non manda il byte: il server chiude allora la finestra all'istante di ricezione e marca i campioni con NO_AGE.",
+  "contentFlags": [
+    {
+      "bit": 3,
+      "name": "age",
+      "bytes": 1,
+      "fragment": 0,
+      "description": "Eta' delle statistiche alla trasmissione, codifica ElapsedTime"
     }
   ],
   "usercomment_frag": "Byte FRAG dell'header del report 0x30. Un report non frammentato vale 0x80: il caso normale non e' un caso speciale, chi riceve accumula sempre finche' non vede il bit 7. La documentazione segnala che manca un identificatore di report (un frammento centrale perso confonderebbe due report consecutivi): la regola scritta qui e' quella che il server applica.",

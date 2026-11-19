@@ -1,10 +1,10 @@
 {
-  "schemaVersion": "2.1.0",
+  "schemaVersion": "2.2.0",
   "usercomment_sv": "schemaVersion e' la versione dello SCHEMA del documento, distinta da templateVersion che e' la versione di questo modello. Lo schema 2.1.0 aggiunge encoding, domain e transform per metrica, adcBits su ranges.elec e definisce ranges.sampling come periodo di acquisizione dello slot.",
   "usercomment_of": "outputFormat dice se il dato che arriva e' la LETTURA grezza del sensore (uncalibrated: il server applica la formula di calibration) o la STIMA del misurando gia' tarata a bordo (calibrated: il server non converte, usa solo si/siExp/dsi per unita' e multipli). La singola metrica puo' sovrascriverlo con 'domain': elec o phys.",
   "outputFormat": "uncalibrated",
   "usercomment_tv": "templateVersion e' la versione del Template a cui il dispositivo aderisce. Sul filo (comando UART 0x31, notifica 0x11, poll 0x0B) viaggia su 1 byte: si trasmette il numero MAJOR. Un cambio di MAJOR significa ordine canonico incompatibile; MINOR e PATCH sono aggiunte in coda, retrocompatibili.",
-  "templateVersion": "1.0.0",
+  "templateVersion": "1.1.0",
   "modelName": "PressureSensorMS5837",
   "mpn": "MS5837-02BA01",
   "manufacturer": "TE Connectivity",
@@ -280,6 +280,13 @@
     ]
   },
   "metrology": {
+    "usercomment_schema220": "Schema 2.2.0 (PIANO_METROLOGIA 2.1). mpe ripete il caso peggiore gia' dichiarato in readingUncertainty.absUncertainty (4 mbar). La pressione in un ambiente stabile varia poco nella finestra: la varianza trasmessa e' rumore del sensore, quindi entra come tipo A della media.",
+    "mpe": [
+      { "min": 10.0, "max": 2000.0, "value": 4.0, "relative": false, "dsi": "\\millibar" }
+    ],
+    "influences": [],
+    "typeAFromVariance": true,
+    "requiresCalibration": true,
     "evaluationFormula": "uB",
     "requiredInputs": [],
     "readingUncertainty": [
