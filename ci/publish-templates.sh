@@ -37,7 +37,8 @@ for kind in sensor reference mu cu protocol procedure profile; do
     [ -e "$file" ] || continue
 
     corpo=$(mktemp)
-    codice=$(curl -sS -o "$corpo" -w '%{http_code}' -X POST "$endpoint?kind=$kind" \
+    codice=$(curl -sS --retry 3 --retry-delay 2 --retry-max-time 30 \
+      -o "$corpo" -w '%{http_code}' -X POST "$endpoint?kind=$kind" \
       -H "Authorization: Bearer $TOKEN" \
       -H 'Content-Type: application/json' \
       --data-binary "@$file")
