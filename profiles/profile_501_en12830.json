@@ -1,0 +1,22 @@
+{
+  "schemaVersion": "2.2.0",
+  "kind": "profile",
+  "templateId": 501,
+  "templateVersion": "1.0.0",
+  "modelName": "ProfiloSurgelatiEN12830",
+  "name": "Conservazione di surgelati, EN 12830 classe 0,5",
+  "usercomment_scope": "Il profilo e' l'uso, non lo strumento: si assegna al punto di controllo, mai al sensore. Dice entro quali limiti deve stare il processo (qui la temperatura dei surgelati, Reg. (CE) 37/2005) e che cosa si chiede allo strumento che lo sorveglia (EN 12830). Le eccezioni del cliente sul punto di controllo possono solo restringere i limiti.",
+  "quantity": "temperature",
+  "dsi": "\\degreeCelsius",
+  "usercomment_limits": "Limite del processo: -18 °C per i surgelati. La conformita' di ogni valore si decide con la banda di guardia U = k·u del valore (ILAC G8): conforme sotto H - U, zona di guardia fra H - U e H + U, non conforme sopra H + U.",
+  "limits": { "high": -18.0 },
+  "usercomment_instrument": "Classe 0,5 della EN 12830:2018: errore massimo ammesso ±0,5 °C. La risoluzione massima e' quella della specifica di progetto; da riscontrare sul testo della norma prima dell'uso in un audit.",
+  "instrument": { "class": "0,5", "mpe": 0.5, "resolutionMax": 0.2 },
+  "usercomment_verificationReference": "Il riferimento per le verifiche intermedie deve avere U ≤ 0,25 °C (k = 2), cioe' meta' dell'MPE della classe.",
+  "verificationReference": { "uMax": 0.25, "k": 2 },
+  "intervals": { "calibration": "P1Y", "intermediateCheck": "P3M" },
+  "recordRetention": "P1Y",
+  "usercomment_decisionRule": "Una zona di guardia che dura piu' di 30 minuti apre un'escursione come un superamento del limite: un valore che non si puo' dire conforme, per mezz'ora, e' un problema di processo.",
+  "decisionRule": { "type": "guarded", "guardBand": "U", "guardZoneOpensExcursionAfter": "PT30M" },
+  "sources": ["EN 12830:2018 §5.10.2.1, tab. 2 e 7", "Reg. (CE) 37/2005 art. 2"]
+}

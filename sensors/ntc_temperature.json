@@ -1,10 +1,10 @@
 {
-  "schemaVersion": "2.1.0",
+  "schemaVersion": "2.2.0",
   "usercomment_sv": "schemaVersion e' la versione dello SCHEMA del documento, distinta da templateVersion che e' la versione di questo modello. Lo schema 2.1.0 aggiunge encoding, domain e transform per metrica, adcBits su ranges.elec e definisce ranges.sampling come periodo di acquisizione dello slot.",
   "usercomment_of": "outputFormat dice se il dato che arriva e' la LETTURA grezza del sensore (uncalibrated: il server applica la formula di calibration) o la STIMA del misurando gia' tarata a bordo (calibrated: il server non converte, usa solo si/siExp/dsi per unita' e multipli). La singola metrica puo' sovrascriverlo con 'domain': elec o phys.",
   "outputFormat": "uncalibrated",
   "usercomment_tv": "templateVersion e' la versione del Template a cui il dispositivo aderisce. Sul filo (comando UART 0x31, notifica 0x11, poll 0x0B) viaggia su 1 byte: si trasmette il numero MAJOR. Un cambio di MAJOR significa ordine canonico incompatibile; MINOR e PATCH sono aggiunte in coda, retrocompatibili.",
-  "templateVersion": "2.0.1",
+  "templateVersion": "2.1.0",
   "modelName": "TemperatureSensorNTC",
   "mpn": "NTCLP450E3",
   "manufacturer": "Vishay",
@@ -391,6 +391,14 @@
     "usercomment_kelvin": "La Steinhart-Hart da' una temperatura in kelvin, mentre unit e i dsi delle metriche dichiarano gradi Celsius: la conversione finale fa parte della formula, non del codice che la valuta. Fino alla 2.0.0 quella sottrazione stava dentro SensorDecoder e il template, letto da solo, era incoerente."
   },
   "metrology": {
+    "usercomment_schema220": "Schema 2.2.0 (PIANO_METROLOGIA 2.1): mpe, drift, influences, typeAFromVariance e requiresCalibration li legge l'UncertaintyEvaluator di sensor-manager per l'incertezza di ogni valore. mpe ripete Uncertainty.maxTollerance, che resta per la pipeline di taratura. La deriva non si dichiara: la scheda tecnica dell'NTC non la da' in una forma utilizzabile, e il valore verra' dalle prime tarature ripetute dello stesso esemplare.",
+    "mpe": [
+      { "min": -40.0, "max": 105.0, "value": 0.5, "relative": false, "dsi": "\\degreeCelsius" }
+    ],
+    "influences": [],
+    "usercomment_typeA": "La varianza trasmessa di una temperatura ambiente e' soprattutto la variabilita' del misurando, non del sensore: non entra come tipo A della media.",
+    "typeAFromVariance": false,
+    "requiresCalibration": true,
     "evaluationFormula": "uB",
     "requiredInputs": [],
     "readingUncertainty": [

@@ -1,0 +1,26 @@
+{
+  "schemaVersion": "2.2.0",
+  "kind": "procedure",
+  "templateId": 401,
+  "templateVersion": "1.0.0",
+  "modelName": "ProceduraPozzettoSecco401",
+  "name": "Taratura per confronto in pozzetto a secco",
+  "usercomment_scope": "La procedura e' il metodo (ISO/IEC 17025 § 7.2): dice dove fermarsi, quando la lettura e' stabile, quante letture fare e con quale regola decidere. La sessione di taratura la cita per (templateId, versione), il DCC la riporta in usedMethods. Sostituisce il metodo scelto a mano nel wizard di Mario.",
+  "quantity": "temperature",
+  "dsi": "\\degreeCelsius",
+  "reference": { "templateId": 301, "major": 1 },
+  "stimulus": "automatic",
+  "points": [-20.0, 0.0, 20.0, 40.0],
+  "usercomment_fitModel": "Il modello di fit che il motore chiede alla pipeline (--procedure di analisi_calib_data.py): lineare, quadratico o cubico nel dominio grezzo (LSB).",
+  "fitModel": "cubic",
+  "usercomment_stability": "Il gradino e' stabile quando la pendenza della lettura del riferimento resta sotto slopeMax per tutta la finestra.",
+  "stability": { "slopeMax": 0.01, "dsi": "\\kelvin\\per\\minute", "window": "PT5M" },
+  "readings": { "blockSize": 20, "blocks": 10 },
+  "hysteresis": false,
+  "usercomment_asLeft": "Punti indipendenti da quelli del fit: l'as-left verifica la funzione nuova dove non e' stata calcolata.",
+  "asLeft": { "points": [-10.0, 30.0] },
+  "methodUncertainty": [
+    { "name": "uniformita' assiale del pozzetto", "u": 0.02, "dsi": "\\kelvin" }
+  ],
+  "decisionRule": { "type": "guarded", "pfaMax": 0.02 }
+}

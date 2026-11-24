@@ -5,10 +5,10 @@ name: Registro dei template
 # e senza riavviare niente: la pubblicazione aggiorna la cache del registro all'istante.
 on:
   pull_request:
-    paths: ["sensors/**", "references/**", "mu/**", "cu/**", "protocol/**"]
+    paths: ["sensors/**", "references/**", "mu/**", "cu/**", "protocol/**", "procedures/**", "profiles/**"]
   push:
     branches: [main]
-    paths: ["sensors/**", "references/**", "mu/**", "cu/**", "protocol/**"]
+    paths: ["sensors/**", "references/**", "mu/**", "cu/**", "protocol/**", "procedures/**", "profiles/**"]
   workflow_dispatch:
 
 jobs:

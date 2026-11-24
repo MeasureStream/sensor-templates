@@ -23,10 +23,12 @@ else
 fi
 
 pubblicati=0
-for kind in sensor reference mu cu protocol; do
+for kind in sensor reference mu cu protocol procedure profile; do
   case "$kind" in
     sensor)    cartella=sensors ;;
     reference) cartella=references ;;
+    procedure) cartella=procedures ;;
+    profile)   cartella=profiles ;;
     *)         cartella=$kind ;;
   esac
   [ -d "$cartella" ] || continue
